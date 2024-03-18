@@ -143,7 +143,7 @@ std::vector<std::vector<CIslandsTile>> CIslandsWorld::GetTiles() const
 
 void CIslandsWorld::Save(const std::string& worldFileName)
 {
-	std::string worldFileNamePath = std::string(ROOT_PATH) + worldFileName;
+	std::string worldFileNamePath = std::string(WORLDS_PATH) + worldFileName;
 
 	std::ofstream worldFile(worldFileNamePath);
 	if (worldFile.is_open())
@@ -165,7 +165,7 @@ void CIslandsWorld::Load(const std::string& worldFileName)
 {
 	std::vector<std::vector<int>> repr;
 
-	std::string worldFilePath = std::string(ROOT_PATH) + worldFileName;
+	std::string worldFilePath = std::string(WORLDS_PATH) + worldFileName;
 	std::ifstream worldFile(worldFilePath);
 	if (worldFile.is_open())
 	{

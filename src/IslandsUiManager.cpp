@@ -264,7 +264,7 @@ void CIslandsUiManager::GetWorldsToLoad()
 {
 	m_worldsToLoad.clear();
 
-	for (const auto& entry : std::filesystem::directory_iterator(std::string(ROOT_PATH)))
+	for (const auto& entry : std::filesystem::directory_iterator(std::string(WORLDS_PATH)))
 	{
 		const auto& path = entry.path();
 		if (path.extension() == ".txt")

@@ -3,6 +3,9 @@
 #pragma once
 
 extern char ROOT_PATH[255];
+extern char FONTS_PATH[255];
+extern char TEXTURES_PATH[255];
+extern char WORLDS_PATH[255];
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;

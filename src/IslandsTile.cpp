@@ -9,11 +9,11 @@ CIslandsTile::CIslandsTile(int id , int type, sf::Vector2i coords, sf::Vector2f 
 	m_id(id), m_type(type), m_coords(coords)
 {
 	// Load textures
-	m_waterTexture.loadFromFile("./src/water.png"); // TODO: move to /textures
-	m_landTexture.loadFromFile("./src/land.png"); // TODO: move to /textures
+	m_waterTexture.loadFromFile("./src/textures/water.png");
+	m_landTexture.loadFromFile("./src/textures/land.png");
 
 	// Load font
-	m_font.loadFromFile("./src/arial.ttf"); // TODO: move to /fonts
+	m_font.loadFromFile("./src/fonts/arial.ttf");
 
 	// -----------
 
