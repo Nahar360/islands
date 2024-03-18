@@ -1,3 +1,4 @@
+/*
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -34,4 +35,19 @@ int main() {
 
     return 0;
 }
+*/
 
+#include "IslandsGame.hpp"
+
+int main()
+{
+	// Fireflies-Synchronization
+	// CGame game;
+	// game.Run();
+
+	// Islands
+	CIslandsGame islandsGame;
+	islandsGame.Run();
+
+	return 0;
+}

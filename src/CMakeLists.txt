@@ -1,4 +1,18 @@
-add_executable(islands main.cpp)
+add_executable(islands
+  GlobalSettings.cpp
+  GlobalSettings.hpp
+  IslandsGame.cpp
+  IslandsGame.hpp
+  IslandsTile.cpp
+  IslandsTile.hpp
+  IslandsUiManager.cpp
+  IslandsUiManager.hpp
+  IslandsWorld.cpp
+  IslandsWorld.hpp
+  UiSettings.cpp
+  UiSettings.hpp
+  main.cpp
+)
 
 target_link_libraries(islands PRIVATE ImGui-SFML::ImGui-SFML)
 
