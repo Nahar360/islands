@@ -1,14 +1,15 @@
-#include "IslandsTile.hpp"
+#ifndef WORLD_HPP
+#define WORLD_HPP
+
+#include "Tile.hpp"
 
 #include <vector>
 
-#pragma once
-
-class CIslandsWorld
+class CWorld
 {
 public:
-	CIslandsWorld() = default;
-	~CIslandsWorld() = default;
+	CWorld() = default;
+	~CWorld() = default;
 
 	void Init(int cols, int rows, int size);
 	void InitRandom(int size);
@@ -23,7 +24,7 @@ public:
 
 	void PrintRepresentation();
 
-	std::vector<std::vector<CIslandsTile>> GetTiles() const;
+	std::vector<std::vector<CTile>> GetTiles() const;
 
 	void Save(const std::string& worldFileName);
 	void Load(const std::string& worldFileName);
@@ -34,23 +35,24 @@ private:
 	int m_cols;
 	int m_rows;
 
-	std::vector<std::vector<CIslandsTile>> m_tiles;
+	std::vector<std::vector<CTile>> m_tiles;
 
 	std::vector<std::vector<int>> m_islands;  // vector of vector of tile ids
 
 	void InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int size);
 
-	void BuildIslandFromLandTile(const CIslandsTile& landTile, std::vector<int>& island);
+	void BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island);
 
-	std::vector<int> GetNeighbourTileIds(const CIslandsTile& tile);
+	std::vector<int> GetNeighbourTileIds(const CTile& tile);
 	void PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds);
 
-	int GetTileIdWithOffset(const CIslandsTile& tile, const sf::Vector2i& offset);
+	int GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset);
 
 	bool IsCoordOutOfBounds(sf::Vector2i coord);
 
-	CIslandsTile GetIslandTileFromId(int id);
+	CTile GetIslandTileFromId(int id);
 
 	bool TileIdAlreadyInIslands(int id);
 };
 
+#endif // WORLD_HPP

@@ -1,4 +1,4 @@
-#include "IslandsWorld.hpp"
+#include "World.hpp"
 
 #include "GlobalSettings.hpp"
 #include "UiSettings.hpp"
@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 
-void CIslandsWorld::Init(int cols, int rows, int size)
+void CWorld::Init(int cols, int rows, int size)
 {
 	m_cols = cols;
 	m_rows = rows;
@@ -17,7 +17,7 @@ void CIslandsWorld::Init(int cols, int rows, int size)
 	InitTilesFromRepr(repr, size);
 }
 
-void CIslandsWorld::InitRandom(int size)
+void CWorld::InitRandom(int size)
 {
 	std::vector<std::vector<int>> repr;
 
@@ -42,7 +42,7 @@ void CIslandsWorld::InitRandom(int size)
 	InitTilesFromRepr(repr, size);
 }
 
-void CIslandsWorld::Clear()
+void CWorld::Clear()
 {
 	m_cols = 0;
 	m_rows = 0;
@@ -50,21 +50,21 @@ void CIslandsWorld::Clear()
 	m_tiles.clear();
 }
 
-void CIslandsWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int size)
+void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int size)
 {
 	m_tiles.clear();
 
 	// initialise tiles depending on representation
 	for (int i = 0; i < repr.size(); i++)
 	{
-		std::vector<CIslandsTile> tiles_row;
+		std::vector<CTile> tiles_row;
 		for (int j = 0; j < repr[i].size(); j++)
 		{
 			int tileType = repr[i][j];
 			sf::Vector2i coords(i, j);
 			sf::Vector2f pos((j + 1) * size, (i + 1) * size);
 
-			CIslandsTile tile((i * repr[i].size()) + j, tileType, coords, pos, size);
+			CTile tile((i * repr[i].size()) + j, tileType, coords, pos, size);
 
 			tiles_row.push_back(tile);
 		}
@@ -76,7 +76,7 @@ void CIslandsWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr,
 	m_rows = m_tiles[0].size();
 }
 
-void CIslandsWorld::Update(sf::RenderWindow& window)
+void CWorld::Update(sf::RenderWindow& window)
 {
 	for (int i = 0; i < m_cols; i++)
 	{
@@ -87,7 +87,7 @@ void CIslandsWorld::Update(sf::RenderWindow& window)
 	}
 }
 
-void CIslandsWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
+void CWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
 {
 	for (int i = 0; i < m_cols; i++)
 	{
@@ -108,7 +108,7 @@ void CIslandsWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i m
 	}
 }
 
-void CIslandsWorld::PrintRepresentation()
+void CWorld::PrintRepresentation()
 {
 	for (int i = 0; i < m_cols; i++)
 	{
@@ -120,28 +120,28 @@ void CIslandsWorld::PrintRepresentation()
 	}
 }
 
-void CIslandsWorld::AddColumn()
+void CWorld::AddColumn()
 {
 }
 
-void CIslandsWorld::RemoveColumn()
+void CWorld::RemoveColumn()
 {
 }
 
-void CIslandsWorld::AddRow()
+void CWorld::AddRow()
 {
 }
 
-void CIslandsWorld::RemoveRow()
+void CWorld::RemoveRow()
 {
 }
 
-std::vector<std::vector<CIslandsTile>> CIslandsWorld::GetTiles() const
+std::vector<std::vector<CTile>> CWorld::GetTiles() const
 {
 	return m_tiles;
 }
 
-void CIslandsWorld::Save(const std::string& worldFileName)
+void CWorld::Save(const std::string& worldFileName)
 {
 	std::string worldFileNamePath = std::string(WORLDS_PATH) + worldFileName;
 
@@ -161,7 +161,7 @@ void CIslandsWorld::Save(const std::string& worldFileName)
 	}
 }
 
-void CIslandsWorld::Load(const std::string& worldFileName)
+void CWorld::Load(const std::string& worldFileName)
 {
 	std::vector<std::vector<int>> repr;
 
@@ -188,7 +188,7 @@ void CIslandsWorld::Load(const std::string& worldFileName)
 	InitTilesFromRepr(repr, ISLANDS_TILE_SIZE_PIXELS);
 }
 
-int CIslandsWorld::DetectIslands()
+int CWorld::DetectIslands()
 {
 	m_islands.clear();
 
@@ -230,7 +230,7 @@ int CIslandsWorld::DetectIslands()
 	return 0;
 }
 
-void CIslandsWorld::BuildIslandFromLandTile(const CIslandsTile& landTile, std::vector<int>& island)
+void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
 {
 	std::vector<int> neighbourTileIds = GetNeighbourTileIds(landTile);
 	PrintNeighbourTileIds(neighbourTileIds);
@@ -239,7 +239,7 @@ void CIslandsWorld::BuildIslandFromLandTile(const CIslandsTile& landTile, std::v
 	// TODO: can be spared?
 	/*if (neighbourTileIds[0] != -1)
 	{
-		const CIslandsTile aboveTile = GetIslandTileFromId(neighbourTileIds[0]);
+		const CTile aboveTile = GetIslandTileFromId(neighbourTileIds[0]);
 		if (aboveTile.GetType() == 1)
 		{
 			if (!TileIdAlreadyInIslands(aboveTile.GetId()))
@@ -253,7 +253,7 @@ void CIslandsWorld::BuildIslandFromLandTile(const CIslandsTile& landTile, std::v
 	// LEFT
 	if (neighbourTileIds[1] != -1)
 	{
-		const CIslandsTile leftTile = GetIslandTileFromId(neighbourTileIds[1]);
+		const CTile leftTile = GetIslandTileFromId(neighbourTileIds[1]);
 		if (leftTile.GetType() == 1)
 		{
 			if (!TileIdAlreadyInIslands(leftTile.GetId()))
@@ -267,7 +267,7 @@ void CIslandsWorld::BuildIslandFromLandTile(const CIslandsTile& landTile, std::v
 	// BELOW
 	if (neighbourTileIds[2] != -1)
 	{
-		const CIslandsTile belowTile = GetIslandTileFromId(neighbourTileIds[2]);
+		const CTile belowTile = GetIslandTileFromId(neighbourTileIds[2]);
 		if (belowTile.GetType() == 1)
 		{
 			if (!TileIdAlreadyInIslands(belowTile.GetId()))
@@ -281,7 +281,7 @@ void CIslandsWorld::BuildIslandFromLandTile(const CIslandsTile& landTile, std::v
 	// RIGHT
 	if (neighbourTileIds[3] != -1)
 	{
-		const CIslandsTile rightTile = GetIslandTileFromId(neighbourTileIds[3]);
+		const CTile rightTile = GetIslandTileFromId(neighbourTileIds[3]);
 		if (rightTile.GetType() == 1)
 		{
 			if (!TileIdAlreadyInIslands(rightTile.GetId()))
@@ -293,7 +293,7 @@ void CIslandsWorld::BuildIslandFromLandTile(const CIslandsTile& landTile, std::v
 	}
 }
 
-std::vector<int> CIslandsWorld::GetNeighbourTileIds(const CIslandsTile& tile)
+std::vector<int> CWorld::GetNeighbourTileIds(const CTile& tile)
 {
 	return {
 		GetTileIdWithOffset(tile, {-1, 0}),
@@ -303,7 +303,7 @@ std::vector<int> CIslandsWorld::GetNeighbourTileIds(const CIslandsTile& tile)
 	};
 }
 
-void CIslandsWorld::PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds)
+void CWorld::PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds)
 {
 	std::cout << "Above: " << neighbourTileIds[0] << std::endl;
 	std::cout << "Left: " << neighbourTileIds[1] << std::endl;
@@ -312,7 +312,7 @@ void CIslandsWorld::PrintNeighbourTileIds(const std::vector<int>& neighbourTileI
 }
 
 
-int CIslandsWorld::GetTileIdWithOffset(const CIslandsTile& tile, const sf::Vector2i& offset)
+int CWorld::GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset)
 {
 	const auto& tileCoords = tile.GetCoords();
 	const sf::Vector2i otherTileCoord = sf::Vector2i(tileCoords.x + offset.x, tileCoords.y + offset.y);
@@ -325,7 +325,7 @@ int CIslandsWorld::GetTileIdWithOffset(const CIslandsTile& tile, const sf::Vecto
 	return -1;
 }
 
-bool CIslandsWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
+bool CWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
 {
 	if (coord.x >= 0 && coord.y >= 0)
 	{
@@ -335,7 +335,7 @@ bool CIslandsWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
 	return true;
 }
 
-CIslandsTile CIslandsWorld::GetIslandTileFromId(int id)
+CTile CWorld::GetIslandTileFromId(int id)
 {
 	for (int i = 0; i < m_cols; i++)
 	{
@@ -353,7 +353,7 @@ CIslandsTile CIslandsWorld::GetIslandTileFromId(int id)
 	// currently: not all control paths return a value (warning)
 }
 
-bool CIslandsWorld::TileIdAlreadyInIslands(int id)
+bool CWorld::TileIdAlreadyInIslands(int id)
 {
 	for (int i = 0; i < m_islands.size(); i++)
 	{

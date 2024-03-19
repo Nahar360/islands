@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UI_SETTINGS_HPP
+#define UI_SETTINGS_HPP
 
 extern int ISLANDS_WORLD_COLS;
 extern int ISLANDS_WORLD_ROWS;
@@ -9,3 +10,5 @@ extern char ISLANDS_WORLD_FILE_NAME_TO_SAVE[255];
 extern int ISLANDS_NUMBER_OF_ISLANDS;
 
 extern int ISLANDS_WORLD_CURRENT_INDEX;
+
+#endif // UI_SETTINGS_HPP

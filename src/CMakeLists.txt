@@ -1,16 +1,16 @@
 add_executable(islands
   GlobalSettings.cpp
   GlobalSettings.hpp
-  IslandsGame.cpp
-  IslandsGame.hpp
-  IslandsTile.cpp
-  IslandsTile.hpp
-  IslandsUiManager.cpp
-  IslandsUiManager.hpp
-  IslandsWorld.cpp
-  IslandsWorld.hpp
+  Game.cpp
+  Game.hpp
+  Tile.cpp
+  Tile.hpp
+  UiManager.cpp
+  UiManager.hpp
   UiSettings.cpp
   UiSettings.hpp
+  World.cpp
+  World.hpp
   main.cpp
 )
 

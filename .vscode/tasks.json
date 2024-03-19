@@ -6,5 +6,5 @@
             "type": "shell",
             "command": "cmake --build ${command:cmake.buildDirectory}",
         }
-    ]                
+    ]
 }

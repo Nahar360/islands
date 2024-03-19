@@ -1,6 +1,6 @@
 #include <filesystem>
 
-#include "IslandsUiManager.hpp"
+#include "UiManager.hpp"
 
 #include "GlobalSettings.hpp"
 #include "UiSettings.hpp"
@@ -12,34 +12,34 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
-void CIslandsUiManager::Init(sf::RenderWindow& window)
+void CUiManager::Init(sf::RenderWindow& window)
 {
 	ImGui::SFML::Init(window);
 
 	GetWorldsToLoad();
 }
 
-void CIslandsUiManager::Shutdown()
+void CUiManager::Shutdown()
 {
 	ImGui::SFML::Shutdown();
 }
 
-void CIslandsUiManager::ProcessEvent(sf::Event event)
+void CUiManager::ProcessEvent(sf::Event event)
 {
 	ImGui::SFML::ProcessEvent(event);
 }
 
-void CIslandsUiManager::Update(sf::RenderWindow& window)
+void CUiManager::Update(sf::RenderWindow& window)
 {
 	ImGui::SFML::Update(window, m_deltaClock.restart());
 }
 
-void CIslandsUiManager::Begin()
+void CUiManager::Begin()
 {
 	ImGui::Begin("Menu");
 }
 
-void CIslandsUiManager::Run(sf::RenderWindow& window, CIslandsWorld& world, float fps)
+void CUiManager::Run(sf::RenderWindow& window, CWorld& world, float fps)
 {
 	Update(window);
 
@@ -50,7 +50,7 @@ void CIslandsUiManager::Run(sf::RenderWindow& window, CIslandsWorld& world, floa
 	End();
 }
 
-void CIslandsUiManager::HandleUi(sf::RenderWindow& window, CIslandsWorld& world, float fps)
+void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 {
 	ImGui::TextColored(ImVec4(1, 1, 0, 1), "General settings");
 
@@ -104,17 +104,17 @@ void CIslandsUiManager::HandleUi(sf::RenderWindow& window, CIslandsWorld& world,
 	DetectIslands(world);
 }
 
-void CIslandsUiManager::End()
+void CUiManager::End()
 {
 	ImGui::End();
 }
 
-void CIslandsUiManager::Render(sf::RenderWindow& window)
+void CUiManager::Render(sf::RenderWindow& window)
 {
 	ImGui::SFML::Render(window);
 }
 
-void CIslandsUiManager::UpdateWindowTitle(sf::RenderWindow& window)
+void CUiManager::UpdateWindowTitle(sf::RenderWindow& window)
 {
 	if (ImGui::InputText("Window title", ISLANDS_WINDOW_TITLE, 255))
 	{
@@ -122,12 +122,12 @@ void CIslandsUiManager::UpdateWindowTitle(sf::RenderWindow& window)
 	}
 }
 
-void CIslandsUiManager::ShowFPS(float fps)
+void CUiManager::ShowFPS(float fps)
 {
 	ImGui::Text("FPS: %f", fps);
 }
 
-void CIslandsUiManager::UpdateMousePosition(sf::RenderWindow& window)
+void CUiManager::UpdateMousePosition(sf::RenderWindow& window)
 {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	if (mousePos.x >= 0 && mousePos.x <= WINDOW_WIDTH &&
@@ -141,7 +141,7 @@ void CIslandsUiManager::UpdateMousePosition(sf::RenderWindow& window)
 	}
 }
 
-void CIslandsUiManager::UpdateBackgroundColor()
+void CUiManager::UpdateBackgroundColor()
 {
 	if (ImGui::ColorEdit3("Background color", BACKGROUND_COLOR_INPUT))
 	{
@@ -151,7 +151,7 @@ void CIslandsUiManager::UpdateBackgroundColor()
 	}
 }
 
-void CIslandsUiManager::InitialiseWorld(CIslandsWorld& world)
+void CUiManager::InitialiseWorld(CWorld& world)
 {
 	ImGui::InputInt("No. cols", &ISLANDS_WORLD_COLS);
 	ImGui::InputInt("No. rows", &ISLANDS_WORLD_ROWS);
@@ -165,7 +165,7 @@ void CIslandsUiManager::InitialiseWorld(CIslandsWorld& world)
 	ImGui::PopStyleColor(2);
 }
 
-void CIslandsUiManager::InitialiseRandomWorld(CIslandsWorld& world)
+void CUiManager::InitialiseRandomWorld(CWorld& world)
 {
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.7f, 0.4f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.9f, 0.4f, 1.0f));
@@ -176,7 +176,7 @@ void CIslandsUiManager::InitialiseRandomWorld(CIslandsWorld& world)
 	ImGui::PopStyleColor(2);
 }
 
-void CIslandsUiManager::ClearWorld(CIslandsWorld& world)
+void CUiManager::ClearWorld(CWorld& world)
 {
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.2f, 0.1f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.2f, 0.1f, 1.0f));
@@ -187,7 +187,7 @@ void CIslandsUiManager::ClearWorld(CIslandsWorld& world)
 	ImGui::PopStyleColor(2);
 }
 
-void CIslandsUiManager::PrintWorldRepresentation(CIslandsWorld& world)
+void CUiManager::PrintWorldRepresentation(CWorld& world)
 {
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.1f, 0.6f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.3f, 0.6f, 1.0f));
@@ -198,7 +198,7 @@ void CIslandsUiManager::PrintWorldRepresentation(CIslandsWorld& world)
 	ImGui::PopStyleColor(2);
 }
 
-void CIslandsUiManager::SaveWorld(CIslandsWorld& world)
+void CUiManager::SaveWorld(CWorld& world)
 {
 	ImGui::TextColored(ImVec4(1, 1, 0, 1), "Save");
 
@@ -214,7 +214,7 @@ void CIslandsUiManager::SaveWorld(CIslandsWorld& world)
 	ImGui::PopStyleColor(2);
 }
 
-void CIslandsUiManager::LoadWorld(CIslandsWorld& world)
+void CUiManager::LoadWorld(CWorld& world)
 {
 	ImGui::TextColored(ImVec4(1, 1, 0, 1), "Load");
 
@@ -247,7 +247,7 @@ void CIslandsUiManager::LoadWorld(CIslandsWorld& world)
 	ImGui::PopStyleColor(2);
 }
 
-void CIslandsUiManager::DetectIslands(CIslandsWorld& world)
+void CUiManager::DetectIslands(CWorld& world)
 {
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.9f, 0.2f, 1.0f));
@@ -260,7 +260,7 @@ void CIslandsUiManager::DetectIslands(CIslandsWorld& world)
 	ImGui::Text("Number of islands: %d", ISLANDS_NUMBER_OF_ISLANDS);
 }
 
-void CIslandsUiManager::GetWorldsToLoad()
+void CUiManager::GetWorldsToLoad()
 {
 	m_worldsToLoad.clear();
 

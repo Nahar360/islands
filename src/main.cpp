@@ -1,9 +1,9 @@
-#include "IslandsGame.hpp"
+#include "Game.hpp"
 
 int main()
 {
-	CIslandsGame islandsGame; // TODO: rename to just CGame
-	islandsGame.Run();
+	CGame game;
+	game.Run();
 
 	return 0;
 }

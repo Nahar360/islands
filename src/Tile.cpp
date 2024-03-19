@@ -1,11 +1,11 @@
-#include "IslandsTile.hpp"
+#include "Tile.hpp"
 
 #include "GlobalSettings.hpp"
 #include "UiSettings.hpp"
 
 #include <iostream>
 
-CIslandsTile::CIslandsTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos, int size) :
+CTile::CTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos, int size) :
 	m_id(id), m_type(type), m_coords(coords)
 {
 	// Load textures
@@ -45,7 +45,7 @@ CIslandsTile::CIslandsTile(int id , int type, sf::Vector2i coords, sf::Vector2f 
 	m_idText.setPosition(m_tile.getPosition().x, m_tile.getPosition().y);
 }
 
-void CIslandsTile::Draw(sf::RenderWindow& window)
+void CTile::Draw(sf::RenderWindow& window)
 {
 	// Tile
 	window.draw(m_tile);
@@ -56,7 +56,7 @@ void CIslandsTile::Draw(sf::RenderWindow& window)
 }
 
 
-bool CIslandsTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
+bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
 {
 	sf::Vector2f mousePosFloat = sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 	if (m_tile.getGlobalBounds().contains(mousePosFloat))
@@ -93,52 +93,52 @@ bool CIslandsTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mo
 	return false;
 }
 
-sf::RectangleShape CIslandsTile::GetTile() const
+sf::RectangleShape CTile::GetTile() const
 {
 	return m_tile;
 }
 
-sf::Color CIslandsTile::GetColor() const
+sf::Color CTile::GetColor() const
 {
 	return m_color;
 }
 
-int CIslandsTile::GetId() const
+int CTile::GetId() const
 {
 	return m_id;
 }
 
-sf::Vector2i CIslandsTile::GetCoords() const
+sf::Vector2i CTile::GetCoords() const
 {
 	return m_coords;
 }
 
-int CIslandsTile::GetType() const
+int CTile::GetType() const
 {
 	return m_type;
 }
 
-void CIslandsTile::SetType(const int type)
+void CTile::SetType(const int type)
 {
 	m_type = type;
 }
 
-bool CIslandsTile::GetSelected() const
+bool CTile::GetSelected() const
 {
 	return m_selected;
 }
 
-void CIslandsTile::SetSelected(const bool selected)
+void CTile::SetSelected(const bool selected)
 {
 	m_selected = selected;
 }
 
-sf::Vector2f CIslandsTile::GetPosition() const
+sf::Vector2f CTile::GetPosition() const
 {
 	return m_tile.getPosition();
 }
 
-void CIslandsTile::printInfo()
+void CTile::printInfo()
 {
 	std::cout << "Tile" << std::endl;
 	std::cout << "Id: " << m_id << std::endl;
@@ -149,7 +149,7 @@ void CIslandsTile::printInfo()
 
 // -------
 
-std::ostream& operator<<(std::ostream& os, const CIslandsTile& tile)
+std::ostream& operator<<(std::ostream& os, const CTile& tile)
 {
 	os << tile.GetType();
 	return os;

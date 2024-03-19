@@ -1,8 +1,9 @@
+#ifndef TILE_HPP
+#define TILE_HPP
+
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
-
-#pragma once
 
 enum class TileType
 {
@@ -19,12 +20,12 @@ TileType WhatTileType(int type)
 */
 
 
-class CIslandsTile
+class CTile
 {
 public:
-	CIslandsTile(int id, int type, sf::Vector2i coords, sf::Vector2f pos, int size);
+	CTile(int id, int type, sf::Vector2i coords, sf::Vector2f pos, int size);
 
-	~CIslandsTile() = default;
+	~CTile() = default;
 
 	void Init(sf::Vector2f pos);
 	void Draw(sf::RenderWindow& window);
@@ -65,5 +66,7 @@ private:
 
 	void printInfo();
 
-	friend std::ostream& operator<<(std::ostream& os, const CIslandsTile& tile);
+	friend std::ostream& operator<<(std::ostream& os, const CTile& tile);
 };
+
+#endif // TILE_HPP

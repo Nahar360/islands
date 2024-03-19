@@ -1,14 +1,14 @@
-#include "IslandsGame.hpp"
+#include "Game.hpp"
 
 #include "GlobalSettings.hpp"
 
-CIslandsGame::CIslandsGame() :
+CGame::CGame() :
 	m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), ISLANDS_WINDOW_TITLE)
 {
 	srand(time(NULL));
 }
 
-void CIslandsGame::Run()
+void CGame::Run()
 {
 	m_uiManager.Init(m_window);
 
@@ -38,7 +38,7 @@ void CIslandsGame::Run()
 	m_uiManager.Shutdown();
 }
 
-void CIslandsGame::CheckEvents()
+void CGame::CheckEvents()
 {
 	sf::Event event;
 	while (m_window.pollEvent(event))
