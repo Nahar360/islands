@@ -1,4 +1,4 @@
-#include "GlobalSettings.hpp"
+#include <SFML/Graphics.hpp>
 
 char ROOT_PATH[255] = "./src/";
 

@@ -1,8 +1,5 @@
 #include "Tile.hpp"
 
-#include "GlobalSettings.hpp"
-#include "UiSettings.hpp"
-
 #include <iostream>
 
 CTile::CTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos, int size) :

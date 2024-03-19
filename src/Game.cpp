@@ -19,7 +19,7 @@ void CGame::Run()
 	while (m_window.isOpen())
 	{
 		currentTime = clock.getElapsedTime();
-		float fps = 1.0f / (currentTime.asSeconds() - previousTime.asSeconds());
+		const float fps = 1.0f / (currentTime.asSeconds() - previousTime.asSeconds());
 		previousTime = currentTime;
 
 		CheckEvents();

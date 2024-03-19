@@ -1,5 +1,3 @@
-#include "UiSettings.hpp"
-
 int ISLANDS_WORLD_COLS = 2;
 int ISLANDS_WORLD_ROWS = 2;
 int ISLANDS_TILE_SIZE_PIXELS = 32;
