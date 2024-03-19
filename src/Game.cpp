@@ -3,7 +3,7 @@
 #include "GlobalSettings.hpp"
 
 CGame::CGame() :
-	m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), ISLANDS_WINDOW_TITLE)
+	m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE)
 {
 	srand(time(NULL));
 }

@@ -68,7 +68,7 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 
 	ImGui::TextColored(ImVec4(1, 1, 0.5, 1), "Create World");
 
-	ImGui::InputInt("Tile size (pixels)", &ISLANDS_TILE_SIZE_PIXELS);
+	ImGui::InputInt("Tile size (pixels)", &TILE_SIZE_PIXELS);
 
 	InitialiseWorld(world);
 	ImGui::SameLine();
@@ -105,9 +105,9 @@ void CUiManager::Render(sf::RenderWindow& window)
 
 void CUiManager::UpdateWindowTitle(sf::RenderWindow& window)
 {
-	if (ImGui::InputText("Window title", ISLANDS_WINDOW_TITLE, 255))
+	if (ImGui::InputText("Window title", WINDOW_TITLE, 255))
 	{
-		window.setTitle(ISLANDS_WINDOW_TITLE);
+		window.setTitle(WINDOW_TITLE);
 	}
 }
 
@@ -142,14 +142,14 @@ void CUiManager::UpdateBackgroundColor()
 
 void CUiManager::InitialiseWorld(CWorld& world)
 {
-	ImGui::InputInt("No. cols", &ISLANDS_WORLD_COLS);
-	ImGui::InputInt("No. rows", &ISLANDS_WORLD_ROWS);
+	ImGui::InputInt("No. cols", &WORLD_COLS);
+	ImGui::InputInt("No. rows", &WORLD_ROWS);
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.1f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
 	if (ImGui::Button("Init. world"))
 	{
-		world.Init(ISLANDS_WORLD_COLS, ISLANDS_WORLD_ROWS, ISLANDS_TILE_SIZE_PIXELS);
+		world.Init(WORLD_COLS, WORLD_ROWS, TILE_SIZE_PIXELS);
 	}
 	ImGui::PopStyleColor(2);
 }
@@ -160,21 +160,21 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.9f, 0.4f, 1.0f));
 	if (ImGui::Button("Init. random world"))
 	{
-		world.InitRandom(ISLANDS_TILE_SIZE_PIXELS);
+		world.InitRandom(TILE_SIZE_PIXELS);
 	}
 	ImGui::PopStyleColor(2);
 }
 
 void CUiManager::EditWorld(CWorld& world)
 {
-	if (ImGui::BeginCombo("Add (types)", m_tileTypesAvailable[ISLANDS_WORLD_CURRENT_TYPE].data(), 0))
+	if (ImGui::BeginCombo("Add (types)", m_tileTypesAvailable[WORLD_CURRENT_TYPE].data(), 0))
 	{
 		for (int n = 0; n < m_tileTypesAvailable.size(); n++)
 		{
-			const bool is_selected = (ISLANDS_WORLD_CURRENT_TYPE == n);
+			const bool is_selected = (WORLD_CURRENT_TYPE == n);
 			if (ImGui::Selectable(m_tileTypesAvailable[n].data(), is_selected))
 			{
-				ISLANDS_WORLD_CURRENT_TYPE = n;
+				WORLD_CURRENT_TYPE = n;
 			}
 
 			if (is_selected)
@@ -189,13 +189,13 @@ void CUiManager::EditWorld(CWorld& world)
 	ImGui::SameLine();
 	if (ImGui::ArrowButton("##leftCol", ImGuiDir_Left)) { world.RemoveColumn(); }
 	ImGui::SameLine();
-	if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right)) { world.AddColumn(ISLANDS_WORLD_CURRENT_TYPE); }
+	if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right)) { world.AddColumn(WORLD_CURRENT_TYPE); }
 
 	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
 	ImGui::SameLine();
 	if (ImGui::ArrowButton("##leftRow", ImGuiDir_Left)) { world.RemoveRow(); }
 	ImGui::SameLine();
-	if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right)) { world.AddRow(ISLANDS_WORLD_CURRENT_TYPE); }
+	if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right)) { world.AddRow(WORLD_CURRENT_TYPE); }
 }
 
 void CUiManager::ClearWorld(CWorld& world)
@@ -224,13 +224,13 @@ void CUiManager::SaveWorld(CWorld& world)
 {
 	ImGui::TextColored(ImVec4(1, 1, 0, 1), "Save");
 
-	ImGui::InputText("World to save", ISLANDS_WORLD_FILE_NAME_TO_SAVE, 255);
+	ImGui::InputText("World to save", WORLD_FILE_NAME_TO_SAVE, 255);
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.5f, 0.2f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.7f, 0.2f, 1.0f));
 	if (ImGui::Button("Save world (to .txt file)"))
 	{
-		world.Save(std::string(ISLANDS_WORLD_FILE_NAME_TO_SAVE));
+		world.Save(std::string(WORLD_FILE_NAME_TO_SAVE));
 		GetWorldsToLoad();
 	}
 	ImGui::PopStyleColor(2);
@@ -242,14 +242,14 @@ void CUiManager::LoadWorld(CWorld& world)
 
 	ImGui::Separator();
 
-	if (ImGui::BeginCombo("World to load", m_worldsToLoad[ISLANDS_WORLD_CURRENT_INDEX].data(), 0))
+	if (ImGui::BeginCombo("World to load", m_worldsToLoad[WORLD_CURRENT_INDEX].data(), 0))
 	{
 		for (int n = 0; n < m_worldsToLoad.size(); n++)
 		{
-			const bool is_selected = (ISLANDS_WORLD_CURRENT_INDEX == n);
+			const bool is_selected = (WORLD_CURRENT_INDEX == n);
 			if (ImGui::Selectable(m_worldsToLoad[n].data(), is_selected))
 			{
-				ISLANDS_WORLD_CURRENT_INDEX = n;
+				WORLD_CURRENT_INDEX = n;
 			}
 
 			if (is_selected)
@@ -264,7 +264,7 @@ void CUiManager::LoadWorld(CWorld& world)
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.5f, 0.0f, 1.0f));
 	if (ImGui::Button("Load world (from .txt file)"))
 	{
-		world.Load(m_worldsToLoad[ISLANDS_WORLD_CURRENT_INDEX]);
+		world.Load(m_worldsToLoad[WORLD_CURRENT_INDEX]);
 	}
 	ImGui::PopStyleColor(2);
 }
@@ -275,11 +275,11 @@ void CUiManager::DetectIslands(CWorld& world)
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.9f, 0.2f, 1.0f));
 	if (ImGui::Button("Detect islands"))
 	{
-		ISLANDS_NUMBER_OF_ISLANDS = world.DetectIslands();
+		NUMBER_OF_ISLANDS = world.DetectIslands();
 	}
 	ImGui::PopStyleColor(2);
 
-	ImGui::Text("Number of islands: %d", ISLANDS_NUMBER_OF_ISLANDS);
+	ImGui::Text("Number of islands: %d", NUMBER_OF_ISLANDS);
 }
 
 void CUiManager::GetWorldsToLoad()

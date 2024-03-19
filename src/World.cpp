@@ -138,7 +138,7 @@ void CWorld::AddColumn(int tileType)
 			const int id = -1; // will be recalculated later
 			const int type = tileType == 2 ? std::rand() % 2 : tileType; // 2 -> random
 			const sf::Vector2i coords(lastTileInRow.GetCoords().x, lastTileInRow.GetCoords().y + 1);
-			const int size = ISLANDS_TILE_SIZE_PIXELS;
+			const int size = TILE_SIZE_PIXELS;
 			const sf::Vector2f pos(lastTileInRow.GetPosition().x + size, lastTileInRow.GetPosition().y);
 
 			CTile newTile(id, type, coords, pos, size);
@@ -185,7 +185,7 @@ void CWorld::AddRow(int tileType)
 			const int id = -1; // will be recalculated right after
 			const int type = tileType == 2 ? std::rand() % 2 : tileType; // 2 -> random
 			const sf::Vector2i coords(tileAbove.GetCoords().x + 1, tileAbove.GetCoords().y);
-			const int size = ISLANDS_TILE_SIZE_PIXELS;
+			const int size = TILE_SIZE_PIXELS;
 			const sf::Vector2f pos(tileAbove.GetPosition().x, tileAbove.GetPosition().y + size);
 
 			CTile newTile(id, type, coords, pos, size);
@@ -262,7 +262,7 @@ void CWorld::Load(const std::string& worldFileName)
 		worldFile.close();
 	}
 
-	InitTilesFromRepr(repr, ISLANDS_TILE_SIZE_PIXELS);
+	InitTilesFromRepr(repr, TILE_SIZE_PIXELS);
 }
 
 int CWorld::DetectIslands()
