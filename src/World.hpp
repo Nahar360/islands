@@ -32,26 +32,21 @@ public:
 	int DetectIslands();
 
 private:
-	int m_cols;
-	int m_rows;
-
 	std::vector<std::vector<CTile>> m_tiles;
 
 	std::vector<std::vector<int>> m_islands;  // vector of vector of tile ids
 
 	void InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int size);
 
-	void BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island);
+	void RecalculateIds();
 
+	// Detect Islands helper functions
+	void BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island);
 	std::vector<int> GetNeighbourTileIds(const CTile& tile);
 	void PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds);
-
 	int GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset);
-
 	bool IsCoordOutOfBounds(sf::Vector2i coord);
-
 	CTile GetIslandTileFromId(int id);
-
 	bool TileIdAlreadyInIslands(int id);
 };
 

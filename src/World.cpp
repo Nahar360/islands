@@ -1,6 +1,7 @@
 #include "World.hpp"
 
 #include "GlobalSettings.hpp"
+#include "Tile.hpp"
 #include "UiSettings.hpp"
 
 #include <vector>
@@ -9,9 +10,6 @@
 
 void CWorld::Init(int cols, int rows, int size)
 {
-	m_cols = cols;
-	m_rows = rows;
-
 	std::vector<std::vector<int>> repr(rows, std::vector<int>(cols, 0));
 
 	InitTilesFromRepr(repr, size);
@@ -21,16 +19,17 @@ void CWorld::InitRandom(int size)
 {
 	std::vector<std::vector<int>> repr;
 
-	int max = 10;
-	int min = 2;
-	int range = (max - min) + 1;
-	m_rows = std::rand() % range + min;
-	m_cols = std::rand() % range + min;
+	const int max = 10;
+	const int min = 2;
+	const int range = (max - min) + 1;
+
+	const int rows = std::rand() % range + min;
+	const int cols = std::rand() % range + min;
 	
-	for (int i = 0; i < m_cols; i++)
+	for (int i = 0; i < cols; i++)
 	{
 		std::vector<int> row;
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < rows; j++)
 		{
 			int tileType = std::rand() % 2;
 			row.push_back(tileType);
@@ -44,9 +43,6 @@ void CWorld::InitRandom(int size)
 
 void CWorld::Clear()
 {
-	m_cols = 0;
-	m_rows = 0;
-
 	m_tiles.clear();
 }
 
@@ -58,29 +54,40 @@ void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int si
 	for (int i = 0; i < repr.size(); i++)
 	{
 		std::vector<CTile> tiles_row;
-		for (int j = 0; j < repr[i].size(); j++)
+		const int numColumns = repr[i].size();
+		for (int j = 0; j < numColumns; j++)
 		{
 			int tileType = repr[i][j];
 			sf::Vector2i coords(i, j);
 			sf::Vector2f pos((j + 1) * size, (i + 1) * size);
 
-			CTile tile((i * repr[i].size()) + j, tileType, coords, pos, size);
+			CTile tile((i * numColumns) + j, tileType, coords, pos, size);
 
 			tiles_row.push_back(tile);
 		}
 
 		m_tiles.push_back(tiles_row);
 	}
+}
 
-	m_cols = m_tiles.size();
-	m_rows = m_tiles[0].size();
+void CWorld::RecalculateIds()
+{
+	for (int i = 0; i < m_tiles.size(); i++)
+	{
+		const int numColumns = m_tiles[0].size();
+		for (int j = 0; j < numColumns; j++)
+		{
+			const int newId = (i * numColumns) + j;
+			m_tiles[i][j].SetId(newId);
+		}
+	}
 }
 
 void CWorld::Update(sf::RenderWindow& window)
 {
-	for (int i = 0; i < m_cols; i++)
+	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < m_tiles[0].size(); j++)
 		{
 			m_tiles[i][j].Draw(window);
 		}
@@ -89,9 +96,9 @@ void CWorld::Update(sf::RenderWindow& window)
 
 void CWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
 {
-	for (int i = 0; i < m_cols; i++)
+	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < m_tiles[0].size(); j++)
 		{
 			if (m_tiles[i][j].MouseDetection(mouseButton, mousePos))
 			{
@@ -110,9 +117,9 @@ void CWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos
 
 void CWorld::PrintRepresentation()
 {
-	for (int i = 0; i < m_cols; i++)
+	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < m_tiles[0].size(); j++)
 		{
 			std::cout << m_tiles[i][j];
 		}
@@ -123,6 +130,23 @@ void CWorld::PrintRepresentation()
 void CWorld::AddColumn()
 {
 	std::cout << "AddColumn" << std::endl;
+	
+	for (int i = 0; i < m_tiles.size(); i++)
+	{
+		const std::vector<CTile> row = m_tiles[i];
+		const CTile lastTileInRow = row.back();
+		
+		const int id = lastTileInRow.GetId() + 1;
+		const int type = 0;
+		const sf::Vector2i coords(lastTileInRow.GetCoords().x, lastTileInRow.GetCoords().y + 1);
+		const int size = ISLANDS_TILE_SIZE_PIXELS;
+		const sf::Vector2f pos(lastTileInRow.GetPosition().x + size, lastTileInRow.GetPosition().y);
+
+		CTile newTile(id, type, coords, pos, size);
+		m_tiles[i].emplace_back(newTile);
+	}
+
+	RecalculateIds();
 }
 
 void CWorld::RemoveColumn()
@@ -152,9 +176,9 @@ void CWorld::Save(const std::string& worldFileName)
 	std::ofstream worldFile(worldFileNamePath);
 	if (worldFile.is_open())
 	{
-		for (int i = 0; i < m_cols; i++)
+		for (int i = 0; i < m_tiles.size(); i++)
 		{
-			for (int j = 0; j < m_rows; j++)
+			for (int j = 0; j < m_tiles[0].size(); j++)
 			{
 				worldFile << std::to_string(m_tiles[i][j].GetType());
 			}
@@ -196,9 +220,11 @@ int CWorld::DetectIslands()
 {
 	m_islands.clear();
 
-	for (int i = 0; i < m_cols; i++)
+	// TODO: review from scratch
+	/*
+	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < m_tiles[0].size(); j++)
 		{
 			const int type = m_tiles[i][j].GetType();
 			if (type == 1)
@@ -230,10 +256,13 @@ int CWorld::DetectIslands()
 		}
 		std::cout << " }" << std::endl;
 	}
+	*/
 
 	return 0;
 }
 
+// Detect Islands helper functions
+// TODO: review from scratch along with DetectIslands()
 void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
 {
 	std::vector<int> neighbourTileIds = GetNeighbourTileIds(landTile);
@@ -341,9 +370,9 @@ bool CWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
 
 CTile CWorld::GetIslandTileFromId(int id)
 {
-	for (int i = 0; i < m_cols; i++)
+	for (int i = 0; i < m_tiles.size(); i++)
 	{
-		for (int j = 0; j < m_rows; j++)
+		for (int j = 0; j < m_tiles[0].size(); j++)
 		{
 			if (id == m_tiles[i][j].GetId())
 			{

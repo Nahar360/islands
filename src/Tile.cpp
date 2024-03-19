@@ -100,6 +100,12 @@ sf::Color CTile::GetColor() const
 	return m_color;
 }
 
+void CTile::SetId(int id)
+{
+	m_id = id;
+	m_idText.setString(std::to_string(id));
+}
+
 int CTile::GetId() const
 {
 	return m_id;

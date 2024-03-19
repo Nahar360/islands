@@ -27,12 +27,14 @@ public:
 
 	~CTile() = default;
 
-	void Init(sf::Vector2f pos);
+	// void Init(sf::Vector2f pos);
 	void Draw(sf::RenderWindow& window);
 	bool MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos);
 
 	sf::RectangleShape GetTile() const;
 	sf::Color GetColor() const;
+
+	void SetId(int id);
 	int GetId() const;
 
 	sf::Vector2i GetCoords() const;
@@ -42,6 +44,8 @@ public:
 
 	void SetSelected(const bool selected);
 	bool GetSelected() const;
+
+	sf::Vector2f GetSize() const { return m_tile.getSize(); }
 
 	sf::Vector2f GetPosition() const;
 
@@ -56,11 +60,11 @@ private:
 	sf::Texture m_waterTexture;
 	sf::Texture m_landTexture;
 	
-	sf::Vector2i m_coords;
-
 	int m_id;
 	int m_type;
 	TileType m_tileType;
+	sf::Vector2i m_coords;	
+	// sf::Vector2f m_pos;
 
 	bool m_selected = false;
 
