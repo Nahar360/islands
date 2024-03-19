@@ -22,6 +22,7 @@ public:
 private:
 	sf::Clock m_deltaClock;
 	std::vector<std::string> m_worldsToLoad;
+	std::vector<std::string> m_tileTypesAvailable{"water", "land", "random"};
 
 	// UI
 	void Update(sf::RenderWindow& window);
@@ -36,6 +37,7 @@ private:
 
 	void InitialiseWorld(CWorld& world);
 	void InitialiseRandomWorld(CWorld& world);
+	void EditWorld(CWorld& world);
 	void ClearWorld(CWorld& world);
 
 	void PrintWorldRepresentation(CWorld& world);

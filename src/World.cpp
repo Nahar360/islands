@@ -127,7 +127,7 @@ void CWorld::PrintRepresentation()
 	}
 }
 
-void CWorld::AddColumn()
+void CWorld::AddColumn(int tileType)
 {	
 	if (!m_tiles.empty())
 	{
@@ -136,7 +136,7 @@ void CWorld::AddColumn()
 			const CTile lastTileInRow = m_tiles[i].back();
 
 			const int id = -1; // will be recalculated later
-			const int type = 0;
+			const int type = tileType == 2 ? std::rand() % 2 : tileType; // 2 -> random
 			const sf::Vector2i coords(lastTileInRow.GetCoords().x, lastTileInRow.GetCoords().y + 1);
 			const int size = ISLANDS_TILE_SIZE_PIXELS;
 			const sf::Vector2f pos(lastTileInRow.GetPosition().x + size, lastTileInRow.GetPosition().y);
@@ -171,7 +171,7 @@ void CWorld::RemoveColumn()
 	}
 }
 
-void CWorld::AddRow()
+void CWorld::AddRow(int tileType)
 {
 	if (!m_tiles.empty())
 	{
@@ -183,7 +183,7 @@ void CWorld::AddRow()
 			const CTile tileAbove = lastRow[i];
 
 			const int id = -1; // will be recalculated right after
-			const int type = 0;
+			const int type = tileType == 2 ? std::rand() % 2 : tileType; // 2 -> random
 			const sf::Vector2i coords(tileAbove.GetCoords().x + 1, tileAbove.GetCoords().y);
 			const int size = ISLANDS_TILE_SIZE_PIXELS;
 			const sf::Vector2f pos(tileAbove.GetPosition().x, tileAbove.GetPosition().y + size);

@@ -18,9 +18,9 @@ public:
 	void Update(sf::RenderWindow& window);
 	void MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos);
 
-	void AddColumn();
+	void AddColumn(int tileType);
 	void RemoveColumn();
-	void AddRow();
+	void AddRow(int tileType);
 	void RemoveRow();
 
 	void PrintRepresentation();

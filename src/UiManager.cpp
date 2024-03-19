@@ -75,18 +75,7 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 	InitialiseRandomWorld(world);
 	
 	ImGui::TextColored(ImVec4(1, 1, 0.5, 1), "Edit World");
-
-	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Cols");
-	ImGui::SameLine();
-	if (ImGui::ArrowButton("##leftCol", ImGuiDir_Left)) { world.RemoveColumn(); }
-	ImGui::SameLine();
-	if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right)) { world.AddColumn(); }
-
-	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
-	ImGui::SameLine();
-	if (ImGui::ArrowButton("##leftRow", ImGuiDir_Left)) { world.RemoveRow(); }
-	ImGui::SameLine();
-	if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right)) { world.AddRow(); }
+	EditWorld(world);
 
 	ClearWorld(world);
 	ImGui::SameLine();
@@ -174,6 +163,39 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
 		world.InitRandom(ISLANDS_TILE_SIZE_PIXELS);
 	}
 	ImGui::PopStyleColor(2);
+}
+
+void CUiManager::EditWorld(CWorld& world)
+{
+	if (ImGui::BeginCombo("Add (types)", m_tileTypesAvailable[ISLANDS_WORLD_CURRENT_TYPE].data(), 0))
+	{
+		for (int n = 0; n < m_tileTypesAvailable.size(); n++)
+		{
+			const bool is_selected = (ISLANDS_WORLD_CURRENT_TYPE == n);
+			if (ImGui::Selectable(m_tileTypesAvailable[n].data(), is_selected))
+			{
+				ISLANDS_WORLD_CURRENT_TYPE = n;
+			}
+
+			if (is_selected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Cols");
+	ImGui::SameLine();
+	if (ImGui::ArrowButton("##leftCol", ImGuiDir_Left)) { world.RemoveColumn(); }
+	ImGui::SameLine();
+	if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right)) { world.AddColumn(ISLANDS_WORLD_CURRENT_TYPE); }
+
+	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
+	ImGui::SameLine();
+	if (ImGui::ArrowButton("##leftRow", ImGuiDir_Left)) { world.RemoveRow(); }
+	ImGui::SameLine();
+	if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right)) { world.AddRow(ISLANDS_WORLD_CURRENT_TYPE); }
 }
 
 void CUiManager::ClearWorld(CWorld& world)
