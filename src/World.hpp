@@ -2,6 +2,7 @@
 #define WORLD_HPP
 
 #include "Tile.hpp"
+#include "UiSettings.hpp"
 
 #include <vector>
 
@@ -11,7 +12,7 @@ public:
 	CWorld() = default;
 	~CWorld() = default;
 
-	void Init(int cols, int rows, int size);
+	void Init(int cols, int rows, int size = ISLANDS_TILE_SIZE_PIXELS);
 	void InitRandom(int size);
 	void Clear();
 	void Update(sf::RenderWindow& window);

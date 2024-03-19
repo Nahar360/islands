@@ -9,7 +9,7 @@
 #include <fstream>
 
 void CWorld::Init(int cols, int rows, int size)
-{
+{	
 	std::vector<std::vector<int>> repr(rows, std::vector<int>(cols, 0));
 
 	InitTilesFromRepr(repr, size);
@@ -128,40 +128,89 @@ void CWorld::PrintRepresentation()
 }
 
 void CWorld::AddColumn()
-{
-	std::cout << "AddColumn" << std::endl;
-	
-	for (int i = 0; i < m_tiles.size(); i++)
+{	
+	if (!m_tiles.empty())
 	{
-		const std::vector<CTile> row = m_tiles[i];
-		const CTile lastTileInRow = row.back();
-		
-		const int id = lastTileInRow.GetId() + 1;
-		const int type = 0;
-		const sf::Vector2i coords(lastTileInRow.GetCoords().x, lastTileInRow.GetCoords().y + 1);
-		const int size = ISLANDS_TILE_SIZE_PIXELS;
-		const sf::Vector2f pos(lastTileInRow.GetPosition().x + size, lastTileInRow.GetPosition().y);
+		for (int i = 0; i < m_tiles.size(); i++)
+		{
+			const CTile lastTileInRow = m_tiles[i].back();
 
-		CTile newTile(id, type, coords, pos, size);
-		m_tiles[i].emplace_back(newTile);
+			const int id = -1; // will be recalculated later
+			const int type = 0;
+			const sf::Vector2i coords(lastTileInRow.GetCoords().x, lastTileInRow.GetCoords().y + 1);
+			const int size = ISLANDS_TILE_SIZE_PIXELS;
+			const sf::Vector2f pos(lastTileInRow.GetPosition().x + size, lastTileInRow.GetPosition().y);
+
+			CTile newTile(id, type, coords, pos, size);
+			m_tiles[i].emplace_back(newTile);
+		}
+
+		// TODO: Ideally this function call would not exist and
+		// the ids of the tiles after the ones being added are recalculated in the go
+		RecalculateIds();
 	}
-
-	RecalculateIds();
+	else
+	{
+		// Initialise a world with a single tile
+		Init(1, 1);
+	}
 }
 
 void CWorld::RemoveColumn()
 {
-	std::cout << "RemoveColumn" << std::endl;
+	if (!m_tiles.empty())
+	{
+		for (int i = 0; i < m_tiles.size(); i++)
+		{
+			m_tiles[i].pop_back();
+		}
+
+		// TODO: Ideally this function call would not exist and
+		// the ids of the tiles after the ones being removed are recalculated in the go
+		RecalculateIds();
+	}
 }
 
 void CWorld::AddRow()
 {
-	std::cout << "AddRow" << std::endl;
+	if (!m_tiles.empty())
+	{
+		std::vector<CTile> newRow;
+		std::vector<CTile> lastRow = m_tiles.back();
+
+		for (int i = 0; i < lastRow.size(); i++)
+		{
+			const CTile tileAbove = lastRow[i];
+
+			const int id = -1; // will be recalculated right after
+			const int type = 0;
+			const sf::Vector2i coords(tileAbove.GetCoords().x + 1, tileAbove.GetCoords().y);
+			const int size = ISLANDS_TILE_SIZE_PIXELS;
+			const sf::Vector2f pos(tileAbove.GetPosition().x, tileAbove.GetPosition().y + size);
+
+			CTile newTile(id, type, coords, pos, size);
+			newRow.emplace_back(newTile);
+		}
+
+		m_tiles.emplace_back(newRow);
+
+		// TODO: Ideally this function call would not exist and
+		// the ids of the tiles after the ones being added are recalculated in the go
+		RecalculateIds();
+	}
+	else
+	{
+		// Initialise a world with a single tile
+		Init(1, 1);
+	}
 }
 
 void CWorld::RemoveRow()
 {
-	std::cout << "RemoveRow" << std::endl;
+	if (!m_tiles.empty())
+	{
+		m_tiles.pop_back();
+	}
 }
 
 std::vector<std::vector<CTile>> CWorld::GetTiles() const
