@@ -62,6 +62,7 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 
 	// -------------------------
 	ImGui::Separator();
+	ImGui::Separator();
 	// -------------------------
 
 	ImGui::TextColored(ImVec4(1, 1, 0, 1), "World settings");
@@ -74,6 +75,8 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 	ImGui::SameLine();
 	InitialiseRandomWorld(world);
 	
+	ImGui::Separator();
+
 	ImGui::TextColored(ImVec4(1, 1, 0.5, 1), "Edit World");
 	EditWorld(world);
 
@@ -81,10 +84,17 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 	ImGui::SameLine();
 	PrintWorldRepresentation(world);
 
+	// -------------------------
+	ImGui::Separator();
+	ImGui::Separator();
+	// -------------------------
+
 	SaveWorld(world);
+	ImGui::Separator();
 	LoadWorld(world);
 
 	// -------------------------
+	ImGui::Separator();
 	ImGui::Separator();
 	// -------------------------
 
@@ -213,7 +223,7 @@ void CUiManager::PrintWorldRepresentation(CWorld& world)
 {
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.1f, 0.6f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.3f, 0.6f, 1.0f));
-	if (ImGui::Button("Print world"))
+	if (ImGui::Button("Print world to console"))
 	{
 		world.PrintRepresentation();
 	}
@@ -239,8 +249,6 @@ void CUiManager::SaveWorld(CWorld& world)
 void CUiManager::LoadWorld(CWorld& world)
 {
 	ImGui::TextColored(ImVec4(1, 1, 0, 1), "Load");
-
-	ImGui::Separator();
 
 	if (ImGui::BeginCombo("World to load", m_worldsToLoad[WORLD_CURRENT_INDEX].data(), 0))
 	{
