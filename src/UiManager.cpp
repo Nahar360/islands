@@ -78,15 +78,15 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 
 	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Cols");
 	ImGui::SameLine();
-	if (ImGui::ArrowButton("##leftCol", ImGuiDir_Left)) { world.AddColumn(); }
+	if (ImGui::ArrowButton("##leftCol", ImGuiDir_Left)) { world.RemoveColumn(); }
 	ImGui::SameLine();
-	if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right)) { world.RemoveColumn(); }
+	if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right)) { world.AddColumn(); }
 
 	ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
 	ImGui::SameLine();
-	if (ImGui::ArrowButton("##leftRow", ImGuiDir_Left)) { world.AddRow(); }
+	if (ImGui::ArrowButton("##leftRow", ImGuiDir_Left)) { world.RemoveRow(); }
 	ImGui::SameLine();
-	if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right)) { world.RemoveRow(); }
+	if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right)) { world.AddRow(); }
 
 	ClearWorld(world);
 	ImGui::SameLine();

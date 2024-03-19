@@ -47,7 +47,7 @@ public:
 
 private:
 	sf::RectangleShape m_tile;
-	//sf::Sprite m_tile;
+	// sf::Sprite m_tile;
 
 	sf::Color m_color;
 	sf::Font m_font;

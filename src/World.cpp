@@ -122,18 +122,22 @@ void CWorld::PrintRepresentation()
 
 void CWorld::AddColumn()
 {
+	std::cout << "AddColumn" << std::endl;
 }
 
 void CWorld::RemoveColumn()
 {
+	std::cout << "RemoveColumn" << std::endl;
 }
 
 void CWorld::AddRow()
 {
+	std::cout << "AddRow" << std::endl;
 }
 
 void CWorld::RemoveRow()
 {
+	std::cout << "RemoveRow" << std::endl;
 }
 
 std::vector<std::vector<CTile>> CWorld::GetTiles() const
