@@ -2,8 +2,8 @@
 
 int main()
 {
-	CGame game;
-	game.Run();
+    CGame game;
+    game.Run();
 
-	return 0;
+    return 0;
 }

@@ -1,54 +1,59 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
-#include "TileType.hpp"
+#include <iostream>
 
-#include "SFML/System/Vector2.hpp"
 #include <SFML/Graphics.hpp>
 
-#include <iostream>
+#include "SFML/System/Vector2.hpp"
+#include "TileType.hpp" // clang-format error
+
 
 class CTile
 {
 public:
-	CTile(int id, TileType type, sf::Vector2i coords, sf::Vector2f pos);
+    CTile(int id, TileType type, sf::Vector2i coords, sf::Vector2f pos);
 
-	~CTile() = default;
+    ~CTile() = default;
 
-	void SetTileTexture(const sf::Texture& texture);
-	void Draw(sf::RenderWindow& window);
-	bool MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos, const sf::Texture& waterTexture, const sf::Texture& landTexture);
+    void SetTileTexture(const sf::Texture& texture);
+    void Draw(sf::RenderWindow& window);
+    bool MouseDetection(
+        sf::Mouse::Button mouseButton,
+        sf::Vector2i mousePos,
+        const sf::Texture& waterTexture,
+        const sf::Texture& landTexture);
 
-	void SetId(int id);
-	int GetId() const;
+    void SetId(int id);
+    int GetId() const;
 
-	void SetType(TileType type);
-	TileType GetType() const;
+    void SetType(TileType type);
+    TileType GetType() const;
 
-	bool IsTypeWater() const;
-	bool IsTypeLand() const;
+    bool IsTypeWater() const;
+    bool IsTypeLand() const;
 
-	void SetCoords(const sf::Vector2i& coords);
-	sf::Vector2i GetCoords() const;
+    void SetCoords(const sf::Vector2i& coords);
+    sf::Vector2i GetCoords() const;
 
-	void SetPosition(const sf::Vector2f& pos);
-	sf::Vector2f GetPosition() const;
+    void SetPosition(const sf::Vector2f& pos);
+    sf::Vector2f GetPosition() const;
 
-	sf::Vector2f GetSize() const;
+    sf::Vector2f GetSize() const;
 
 private:
-	sf::Sprite m_tile;
+    sf::Sprite m_tile;
 
-	sf::Font m_font;
-	sf::Text m_idText;
-	
-	int m_id;
-	TileType m_type;
-	sf::Vector2i m_coords;
+    sf::Font m_font;
+    sf::Text m_idText;
 
-	// -------
+    int m_id;
+    TileType m_type;
+    sf::Vector2i m_coords;
 
-	friend std::ostream& operator<<(std::ostream& os, const CTile& tile);
+    // -------
+
+    friend std::ostream& operator<<(std::ostream& os, const CTile& tile);
 };
 
 #endif // TILE_HPP

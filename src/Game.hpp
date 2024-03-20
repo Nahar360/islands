@@ -9,20 +9,20 @@
 class CGame
 {
 public:
-	CGame();
-	~CGame() = default;
+    CGame();
+    ~CGame() = default;
 
-	void Run();
+    void Run();
 
 private:
-	sf::RenderWindow m_window;
+    sf::RenderWindow m_window;
 
-	CUiManager m_uiManager;
-	CWorld m_world;
+    CUiManager m_uiManager;
+    CWorld m_world;
 
-	bool m_mouseHasBeenPressed = false;
+    bool m_mouseHasBeenPressed = false;
 
-	void CheckEvents();
+    void CheckEvents();
 };
 
 #endif // GAME_HPP

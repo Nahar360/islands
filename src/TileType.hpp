@@ -3,9 +3,9 @@
 
 enum class TileType
 {
-	BLANK = -1,
-	WATER = 0,
-	LAND = 1,
+    BLANK = -1,
+    WATER = 0,
+    LAND = 1,
 };
 
 #endif // TILE_TYPE_HPP

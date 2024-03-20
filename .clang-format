@@ -1,0 +1,51 @@
+# This file describes configurable formatting style options supported by ClangFormat
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+#
+# Example commands 
+# How to reformat a single file:
+# clang-format -i --style=file <file>
+#
+# How to reformat a sub-folder/project, e.g. /source/prod_epg/fsx (from core-app):
+# find ./source/prog_epg/fsx -iname *.h -o -iname *.cpp | xargs clang-format -i -style=file
+#
+# How to reformat the whole code base (from core-app):
+# find . -iname *.h -o -iname *.cpp | xargs clang-format -i -style=file
+
+Language: Cpp  # This format style is targeted at this language
+BasedOnStyle: LLVM  # A style complying with the LLVM coding standards (https://llvm.org/docs/CodingStandards.html)
+ColumnLimit: 120
+InsertNewlineAtEOF: true  # Always insert a newline at end of file if missing
+
+# Indentation
+IndentWidth: 4  # The number of columns to use for indentation
+AccessModifierOffset: -4  # The extra indent or outdent of access modifiers, e.g. public:
+BreakBeforeBraces: Allman  # Always break before braces
+AllowShortFunctionsOnASingleLine: Inline  # Only merge functions defined inside a class and empty functions
+BinPackParameters: false  # A function declaration’s or function definition’s parameters will either all be on the same line or will have one line each
+BinPackArguments: false  # A function call’s arguments will either be all on the same line or will have one line each
+AlignAfterOpenBracket: AlwaysBreak  # Always break after an open bracket, if the parameters don’t fit on a single line
+
+# Alignment
+PointerAlignment: Left  # Align pointer to the left, e.g. int* x;
+ReferenceAlignment: Pointer  # Align reference like PointerAlignment (Left), e.g. int& x;
+QualifierAlignment: Leave  # Do not change specifiers/qualifiers to either Left or Right alignment
+
+# Order of includes
+SortIncludes: CaseInsensitive  # Includes are sorted in an alphabetical or case insensitive fashion
+IncludeBlocks: Regroup  # Merge multiple #include blocks together and sort as one. Then split into groups based on category priority
+IncludeCategories:  # Denote the different categories used for ordering #includes
+  # The main header for a source file automatically gets priority 0
+  # so that it is generally kept at the beginning of the #includes
+
+  # External headers in <> without extension.
+  - Regex: '<([A-Za-z0-9\Q/-_\E])+>'
+    Priority: 1
+  # External headers in <> with extension.
+  - Regex: '<([A-Za-z0-9.\Q/-_\E])+>'
+    Priority: 2
+  # Local headers in "" with extension.
+  - Regex: '"[-\w\/-_]*"'
+    Priority: 3
+  # Anything else
+  - Regex: ".*"
+    Priority: 4
