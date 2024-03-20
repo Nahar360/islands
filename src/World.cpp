@@ -6,6 +6,7 @@
 
 #include "GlobalSettings.hpp"
 #include "Tile.hpp"
+#include "UiSettings.hpp"
 
 void CWorld::Init()
 {
@@ -50,7 +51,7 @@ void CWorld::InitTilesRandom()
 
 void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
 {
-    m_tiles.clear();
+    Clear();
 
     // Initialise tiles depending on representation
     for (int i = 0; i < repr.size(); i++)
@@ -92,6 +93,8 @@ CTile CWorld::CreateTile(int id, int type, const sf::Vector2i& coords, const sf:
 void CWorld::Clear()
 {
     m_tiles.clear();
+    m_islands.clear();
+    UiSettings::NUMBER_OF_ISLANDS = 0;
 }
 
 void CWorld::RecalculateIds()
@@ -286,49 +289,42 @@ int CWorld::DetectIslands()
 {
     m_islands.clear();
 
-    // TODO: review from scratch
-    /*
     for (int i = 0; i < m_tiles.size(); i++)
     {
-            for (int j = 0; j < m_tiles[0].size(); j++)
+        for (int j = 0; j < m_tiles[0].size(); j++)
+        {
+            if (m_tiles[i][j].IsTypeLand())
             {
-                    const int type = m_tiles[i][j].GetType();
-                    if (type == 1)
-                    {
-                            const int tileId = m_tiles[i][j].GetId();
-                            if (!TileIdAlreadyInIslands(tileId))
-                            {
-                                    std::vector<int> island{ tileId };
-                                    BuildIslandFromLandTile(m_tiles[i][j], island);
-                                    m_islands.emplace_back(island);
-                            }
-                    }
+                const int tileId = m_tiles[i][j].GetId();
+                if (!TileIdAlreadyInIslands(tileId))
+                {
+                    std::vector<int> island{tileId};
+                    BuildIslandFromLandTile(m_tiles[i][j], island);
+                    m_islands.emplace_back(island);
+                }
             }
-            std::cout << std::endl;
+        }
+        std::cout << std::endl;
     }
 
-    std::cout << "Number of islands: " << m_islands.size() << std::endl;
-
+    // Just printing...
     for (int i = 0; i < m_islands.size(); i++)
     {
-            std::cout << "Island number " << i + 1 << ": { ";
-            for (int j = 0; j < m_islands[i].size(); j++)
+        std::cout << "Island number " << i + 1 << ": { ";
+        for (int j = 0; j < m_islands[i].size(); j++)
+        {
+            std::cout << m_islands[i][j];
+            if (j != m_islands[i].size() - 1)
             {
-                    std::cout << m_islands[i][j];
-                    if (j != m_islands[i].size() - 1)
-                    {
-                            std::cout << ", ";
-                    }
+                std::cout << ", ";
             }
-            std::cout << " }" << std::endl;
+        }
+        std::cout << " }" << std::endl;
     }
-    */
 
-    return 0;
+    return m_islands.size();
 }
 
-// Detect Islands helper functions
-// TODO: review from scratch along with DetectIslands()
 void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
 {
     std::vector<int> neighbourTileIds = GetNeighbourTileIds(landTile);
@@ -394,11 +390,14 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
 
 std::vector<int> CWorld::GetNeighbourTileIds(const CTile& tile)
 {
-    return {
-        GetTileIdWithOffset(tile, {-1, 0}),
-        GetTileIdWithOffset(tile, {0, -1}),
-        GetTileIdWithOffset(tile, {1, 0}),
-        GetTileIdWithOffset(tile, {0, 1})};
+    // clang-format off
+    const int aboveTileId = GetTileIdWithOffset(tile, {-1, 0});
+    const int leftTileId  = GetTileIdWithOffset(tile, {0, -1});
+    const int belowTileId = GetTileIdWithOffset(tile, {1, 0});
+    const int rightTileId = GetTileIdWithOffset(tile, {0, 1});
+    // clang-format on
+
+    return {aboveTileId, leftTileId, belowTileId, rightTileId};
 }
 
 void CWorld::PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds)
@@ -424,7 +423,7 @@ int CWorld::GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset)
 
 bool CWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
 {
-    if (coord.x >= 0 && coord.y >= 0)
+    if (coord.x >= 0 && coord.y >= 0 && coord.x < m_tiles.size() && coord.y < m_tiles[coord.x].size())
     {
         return false;
     }
