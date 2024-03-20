@@ -151,14 +151,14 @@ void CUiManager::UpdateBackgroundColor()
 
 void CUiManager::InitialiseWorld(CWorld& world)
 {
-    ImGui::InputInt("No. cols", &WORLD_COLS);
-    ImGui::InputInt("No. rows", &WORLD_ROWS);
+    ImGui::InputInt("No. cols", &UiSettings::WORLD_COLS);
+    ImGui::InputInt("No. rows", &UiSettings::WORLD_ROWS);
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.1f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
     if (ImGui::Button("Init. world"))
     {
-        world.InitTiles(WORLD_COLS, WORLD_ROWS);
+        world.InitTiles(UiSettings::WORLD_COLS, UiSettings::WORLD_ROWS);
     }
     ImGui::PopStyleColor(2);
 }
@@ -176,14 +176,14 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
 
 void CUiManager::EditWorld(CWorld& world)
 {
-    if (ImGui::BeginCombo("Add (types)", m_tileTypesAvailable[WORLD_CURRENT_TYPE].data(), 0))
+    if (ImGui::BeginCombo("Add (types)", m_tileTypesAvailable[UiSettings::WORLD_CURRENT_TYPE].data(), 0))
     {
         for (int n = 0; n < m_tileTypesAvailable.size(); n++)
         {
-            const bool is_selected = (WORLD_CURRENT_TYPE == n);
+            const bool is_selected = (UiSettings::WORLD_CURRENT_TYPE == n);
             if (ImGui::Selectable(m_tileTypesAvailable[n].data(), is_selected))
             {
-                WORLD_CURRENT_TYPE = n;
+                UiSettings::WORLD_CURRENT_TYPE = n;
             }
 
             if (is_selected)
@@ -203,7 +203,7 @@ void CUiManager::EditWorld(CWorld& world)
     ImGui::SameLine();
     if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right))
     {
-        world.AddColumn(WORLD_CURRENT_TYPE);
+        world.AddColumn(UiSettings::WORLD_CURRENT_TYPE);
     }
 
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
@@ -215,7 +215,7 @@ void CUiManager::EditWorld(CWorld& world)
     ImGui::SameLine();
     if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right))
     {
-        world.AddRow(WORLD_CURRENT_TYPE);
+        world.AddRow(UiSettings::WORLD_CURRENT_TYPE);
     }
 }
 
@@ -245,13 +245,13 @@ void CUiManager::SaveWorld(CWorld& world)
 {
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "Save");
 
-    ImGui::InputText("World to save", WORLD_FILE_NAME_TO_SAVE, 255);
+    ImGui::InputText("World to save", UiSettings::WORLD_FILE_NAME_TO_SAVE, 255);
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.5f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.7f, 0.2f, 1.0f));
     if (ImGui::Button("Save world (to .txt file)"))
     {
-        world.Save(std::string(WORLD_FILE_NAME_TO_SAVE));
+        world.Save(std::string(UiSettings::WORLD_FILE_NAME_TO_SAVE));
         GetWorldsToLoad();
     }
     ImGui::PopStyleColor(2);
@@ -261,14 +261,14 @@ void CUiManager::LoadWorld(CWorld& world)
 {
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "Load");
 
-    if (ImGui::BeginCombo("World to load", m_worldsToLoad[WORLD_CURRENT_INDEX].data(), 0))
+    if (ImGui::BeginCombo("World to load", m_worldsToLoad[UiSettings::WORLD_CURRENT_INDEX].data(), 0))
     {
         for (int n = 0; n < m_worldsToLoad.size(); n++)
         {
-            const bool is_selected = (WORLD_CURRENT_INDEX == n);
+            const bool is_selected = (UiSettings::WORLD_CURRENT_INDEX == n);
             if (ImGui::Selectable(m_worldsToLoad[n].data(), is_selected))
             {
-                WORLD_CURRENT_INDEX = n;
+                UiSettings::WORLD_CURRENT_INDEX = n;
             }
 
             if (is_selected)
@@ -283,7 +283,7 @@ void CUiManager::LoadWorld(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.5f, 0.0f, 1.0f));
     if (ImGui::Button("Load world (from .txt file)"))
     {
-        world.Load(m_worldsToLoad[WORLD_CURRENT_INDEX]);
+        world.Load(m_worldsToLoad[UiSettings::WORLD_CURRENT_INDEX]);
     }
     ImGui::PopStyleColor(2);
 }
@@ -294,11 +294,11 @@ void CUiManager::DetectIslands(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.9f, 0.2f, 1.0f));
     if (ImGui::Button("Detect islands"))
     {
-        NUMBER_OF_ISLANDS = world.DetectIslands();
+        UiSettings::NUMBER_OF_ISLANDS = world.DetectIslands();
     }
     ImGui::PopStyleColor(2);
 
-    ImGui::Text("Number of islands: %d", NUMBER_OF_ISLANDS);
+    ImGui::Text("Number of islands: %d", UiSettings::NUMBER_OF_ISLANDS);
 }
 
 void CUiManager::GetWorldsToLoad()
