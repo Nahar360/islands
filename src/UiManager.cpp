@@ -115,9 +115,9 @@ void CUiManager::Render(sf::RenderWindow& window)
 
 void CUiManager::UpdateWindowTitle(sf::RenderWindow& window)
 {
-    if (ImGui::InputText("Window title", WINDOW_TITLE, 255))
+    if (ImGui::InputText("Window title", GlobalSettings::WINDOW_TITLE, 255))
     {
-        window.setTitle(WINDOW_TITLE);
+        window.setTitle(GlobalSettings::WINDOW_TITLE);
     }
 }
 
@@ -129,7 +129,7 @@ void CUiManager::ShowFPS(float fps)
 void CUiManager::UpdateMousePosition(sf::RenderWindow& window)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    if (mousePos.x >= 0 && mousePos.x <= WINDOW_WIDTH && mousePos.y >= 0 && mousePos.y <= WINDOW_HEIGHT)
+    if (mousePos.x >= 0 && mousePos.x <= GlobalSettings::WINDOW_WIDTH && mousePos.y >= 0 && mousePos.y <= GlobalSettings::WINDOW_HEIGHT)
     {
         ImGui::Text("Mouse position: (%d, %d)", mousePos.x, mousePos.y);
     }
@@ -141,11 +141,11 @@ void CUiManager::UpdateMousePosition(sf::RenderWindow& window)
 
 void CUiManager::UpdateBackgroundColor()
 {
-    if (ImGui::ColorEdit3("Background color", BACKGROUND_COLOR_INPUT))
+    if (ImGui::ColorEdit3("Background color", GlobalSettings::BACKGROUND_COLOR_INPUT))
     {
-        BACKGROUND_COLOR.r = static_cast<sf::Uint8>(BACKGROUND_COLOR_INPUT[0] * 255.f);
-        BACKGROUND_COLOR.g = static_cast<sf::Uint8>(BACKGROUND_COLOR_INPUT[1] * 255.f);
-        BACKGROUND_COLOR.b = static_cast<sf::Uint8>(BACKGROUND_COLOR_INPUT[2] * 255.f);
+        GlobalSettings::BACKGROUND_COLOR.r = static_cast<sf::Uint8>(GlobalSettings::BACKGROUND_COLOR_INPUT[0] * 255.f);
+        GlobalSettings::BACKGROUND_COLOR.g = static_cast<sf::Uint8>(GlobalSettings::BACKGROUND_COLOR_INPUT[1] * 255.f);
+        GlobalSettings::BACKGROUND_COLOR.b = static_cast<sf::Uint8>(GlobalSettings::BACKGROUND_COLOR_INPUT[2] * 255.f);
     }
 }
 
@@ -305,7 +305,7 @@ void CUiManager::GetWorldsToLoad()
 {
     m_worldsToLoad.clear();
 
-    for (const auto& entry : std::filesystem::directory_iterator(std::string(WORLDS_PATH)))
+    for (const auto& entry : std::filesystem::directory_iterator(std::string(GlobalSettings::WORLDS_PATH)))
     {
         const auto& path = entry.path();
         if (path.extension() == ".txt")

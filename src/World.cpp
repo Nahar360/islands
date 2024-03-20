@@ -11,8 +11,8 @@
 void CWorld::Init()
 {
     // Load textures
-    m_waterTexture.loadFromFile(std::string(TEXTURES_PATH) + "water.png");
-    m_landTexture.loadFromFile(std::string(TEXTURES_PATH) + "land.png");
+    m_waterTexture.loadFromFile(std::string(GlobalSettings::TEXTURES_PATH) + "water.png");
+    m_landTexture.loadFromFile(std::string(GlobalSettings::TEXTURES_PATH) + "land.png");
 }
 
 void CWorld::InitTiles(int cols, int rows)
@@ -232,7 +232,7 @@ void CWorld::RemoveRow()
 
 void CWorld::Save(const std::string& worldFileName)
 {
-    std::string worldFileNamePath = std::string(WORLDS_PATH) + worldFileName;
+    std::string worldFileNamePath = std::string(GlobalSettings::WORLDS_PATH) + worldFileName;
 
     std::ofstream worldFile(worldFileNamePath);
     if (worldFile.is_open())
@@ -254,7 +254,7 @@ void CWorld::Load(const std::string& worldFileName)
 {
     std::vector<std::vector<int>> repr;
 
-    std::string worldFilePath = std::string(WORLDS_PATH) + worldFileName;
+    std::string worldFilePath = std::string(GlobalSettings::WORLDS_PATH) + worldFileName;
     std::ifstream worldFile(worldFilePath);
     if (worldFile.is_open())
     {

@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+namespace GlobalSettings
+{
 extern char WINDOW_TITLE[255];
 
 extern int WINDOW_WIDTH;
@@ -14,5 +16,6 @@ extern char WORLDS_PATH[255];
 
 extern sf::Color BACKGROUND_COLOR;
 extern float BACKGROUND_COLOR_INPUT[3];
+} // namespace GlobalSettings
 
 #endif // GLOBAL_SETTINGS_HPP

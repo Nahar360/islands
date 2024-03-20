@@ -8,7 +8,7 @@
 CTile::CTile(int id, TileType type, sf::Vector2i coords, sf::Vector2f pos) : m_id(id), m_type(type), m_coords(coords)
 {
     // Load font
-    m_font.loadFromFile(std::string(FONTS_PATH) + "arial.ttf");
+    m_font.loadFromFile(std::string(GlobalSettings::FONTS_PATH) + "arial.ttf");
 
     // Position
     m_tile.setPosition(pos);

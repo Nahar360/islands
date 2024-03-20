@@ -2,7 +2,8 @@
 
 #include "GlobalSettings.hpp"
 
-CGame::CGame() : m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_TITLE)
+CGame::CGame()
+    : m_window(sf::VideoMode(GlobalSettings::WINDOW_WIDTH, GlobalSettings::WINDOW_HEIGHT), GlobalSettings::WINDOW_TITLE)
 {
     srand(time(NULL));
 }
@@ -28,7 +29,7 @@ void CGame::Run()
 
         m_uiManager.Run(m_window, m_world, fps);
 
-        m_window.clear(BACKGROUND_COLOR);
+        m_window.clear(GlobalSettings::BACKGROUND_COLOR);
 
         m_world.Update(m_window);
 
