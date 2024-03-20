@@ -1,11 +1,12 @@
 #include "Tile.hpp"
 
 #include "GlobalSettings.hpp"
+
 #include "SFML/System/Vector2.hpp"
 
 #include <iostream>
 
-CTile::CTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos) :
+CTile::CTile(int id , TileType type, sf::Vector2i coords, sf::Vector2f pos) :
 	m_id(id), m_type(type), m_coords(coords)
 {
 	// Load font
@@ -48,22 +49,22 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos,
 		{
 		case sf::Mouse::Button::Left:
 		{
-			if (m_type == 0)
+			if (m_type == TileType::WATER)
 			{
 				printInfo();
 
-				m_type = 1;
+				m_type = TileType::LAND;
 				SetTileTexture(landTexture);
 			}
 			return true;
 		}
 		case sf::Mouse::Button::Right:
 		{
-			if (m_type == 1)
+			if (m_type == TileType::LAND)
 			{
 				printInfo();
 
-				m_type = 0;
+				m_type = TileType::WATER;
 				SetTileTexture(waterTexture);
 			}
 			return true;
@@ -87,14 +88,19 @@ int CTile::GetId() const
 	return m_id;
 }
 
-int CTile::GetType() const
+TileType CTile::GetType() const
 {
 	return m_type;
 }
 
-void CTile::SetType(const int type)
+void CTile::SetType(TileType type)
 {
 	m_type = type;
+}
+
+bool CTile::IsTypeLand() const
+{
+	return m_type == TileType::LAND;
 }
 
 void CTile::SetCoords(const sf::Vector2i &coords)
@@ -122,7 +128,7 @@ bool CTile::GetSelected() const
 	return m_selected;
 }
 
-void CTile::SetSelected(const bool selected)
+void CTile::SetSelected(bool selected)
 {
 	m_selected = selected;
 }
@@ -136,7 +142,7 @@ void CTile::printInfo()
 {
 	std::cout << "Tile" << std::endl;
 	std::cout << "Id: " << m_id << std::endl;
-	std::cout << "Type: " << m_type << std::endl;
+	std::cout << "Type: " << static_cast<int>(m_type) << std::endl;
 	std::cout << "Coords.: [" << m_coords.x << ", " << m_coords.y << "]" << std::endl;
 	std::cout << std::endl;
 }
@@ -145,6 +151,6 @@ void CTile::printInfo()
 
 std::ostream& operator<<(std::ostream& os, const CTile& tile)
 {
-	os << tile.GetType();
+	os << static_cast<int>(tile.GetType());
 	return os;
 }

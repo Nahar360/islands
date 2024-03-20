@@ -1,30 +1,17 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
+#include "TileType.hpp"
+
 #include "SFML/System/Vector2.hpp"
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
 
-enum class TileType
-{
-	BLANK = -1,
-	WATER = 0,
-	LAND = 1,
-};
-
-/*
-TileType WhatTileType(int type)
-{
-	return static_cast<TileType>(type);
-}
-*/
-
-
 class CTile
 {
 public:
-	CTile(int id, int type, sf::Vector2i coords, sf::Vector2f pos);
+	CTile(int id, TileType type, sf::Vector2i coords, sf::Vector2f pos);
 
 	~CTile() = default;
 
@@ -35,8 +22,10 @@ public:
 	void SetId(int id);
 	int GetId() const;
 
-	void SetType(const int type);
-	int GetType() const;
+	void SetType(TileType type);
+	TileType GetType() const;
+
+	bool IsTypeLand() const;
 
 	void SetCoords(const sf::Vector2i& coords);
 	sf::Vector2i GetCoords() const;
@@ -44,7 +33,7 @@ public:
 	void SetPosition(const sf::Vector2f& pos);
 	sf::Vector2f GetPosition() const;
 
-	void SetSelected(const bool selected);
+	void SetSelected(bool selected);
 	bool GetSelected() const;
 
 	sf::Vector2f GetSize() const;
@@ -56,9 +45,8 @@ private:
 	sf::Text m_idText;
 	
 	int m_id;
-	int m_type;
-	TileType m_tileType;
-	sf::Vector2i m_coords;	
+	TileType m_type;
+	sf::Vector2i m_coords;
 
 	bool m_selected = false;
 

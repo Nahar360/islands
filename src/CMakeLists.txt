@@ -5,6 +5,7 @@ add_executable(islands
   Game.hpp
   Tile.cpp
   Tile.hpp
+  TileType.hpp
   UiManager.cpp
   UiManager.hpp
   UiSettings.cpp

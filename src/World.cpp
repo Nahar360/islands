@@ -64,10 +64,10 @@ void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
 		for (int j = 0; j < numColumns; j++)
 		{
 			const int id = (i * numColumns) + j;
-			int tileType = repr[i][j];
-			sf::Vector2i coords(i, j);
+			const int tileType = repr[i][j];
+			const sf::Vector2i coords(i, j);
 			const int textureSize = m_waterTexture.getSize().x; // y
-			sf::Vector2f pos((j + 1) * textureSize, (i + 1) * textureSize);
+			const sf::Vector2f pos((j + 1) * textureSize, (i + 1) * textureSize);
 			
 			const CTile tile = CreateTile(id, tileType, coords, pos);
 
@@ -80,7 +80,7 @@ void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
 
 CTile CWorld::CreateTile(int id, int type, const sf::Vector2i& coords, const sf::Vector2f& pos)
 {
-	CTile tile(id, type, coords, pos);
+	CTile tile(id, static_cast<TileType>(type), coords, pos);
 	if (type == 0) {
 		tile.SetTileTexture(m_waterTexture);
 	}
@@ -250,7 +250,7 @@ void CWorld::Save(const std::string& worldFileName)
 		{
 			for (int j = 0; j < m_tiles[0].size(); j++)
 			{
-				worldFile << std::to_string(m_tiles[i][j].GetType());
+				worldFile << std::to_string(static_cast<int>(m_tiles[i][j].GetType()));
 			}
 			worldFile << std::endl;
 		}
@@ -357,7 +357,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
 	if (neighbourTileIds[1] != -1)
 	{
 		const CTile leftTile = GetIslandTileFromId(neighbourTileIds[1]);
-		if (leftTile.GetType() == 1)
+		if (leftTile.IsTypeLand())
 		{
 			if (!TileIdAlreadyInIslands(leftTile.GetId()))
 			{
@@ -371,7 +371,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
 	if (neighbourTileIds[2] != -1)
 	{
 		const CTile belowTile = GetIslandTileFromId(neighbourTileIds[2]);
-		if (belowTile.GetType() == 1)
+		if (belowTile.IsTypeLand())
 		{
 			if (!TileIdAlreadyInIslands(belowTile.GetId()))
 			{
@@ -385,7 +385,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
 	if (neighbourTileIds[3] != -1)
 	{
 		const CTile rightTile = GetIslandTileFromId(neighbourTileIds[3]);
-		if (rightTile.GetType() == 1)
+		if (rightTile.IsTypeLand())
 		{
 			if (!TileIdAlreadyInIslands(rightTile.GetId()))
 			{
