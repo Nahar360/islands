@@ -26,8 +26,6 @@ public:
 
 	void PrintRepresentation();
 
-	std::vector<std::vector<CTile>> GetTiles() const;
-
 	void Save(const std::string& worldFileName);
 	void Load(const std::string& worldFileName);
 

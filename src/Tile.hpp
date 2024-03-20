@@ -48,8 +48,6 @@ private:
 
 	// -------
 
-	void printInfo();
-
 	friend std::ostream& operator<<(std::ostream& os, const CTile& tile);
 };
 

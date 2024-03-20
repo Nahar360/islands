@@ -45,14 +45,14 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos,
 	sf::Vector2f mousePosFloat = sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 	if (m_tile.getGlobalBounds().contains(mousePosFloat))
 	{
+		std::cout << *this;
+
 		switch (mouseButton)
 		{
 		case sf::Mouse::Button::Left:
 		{
 			if (m_type == TileType::WATER)
 			{
-				printInfo();
-
 				m_type = TileType::LAND;
 				SetTileTexture(landTexture);
 			}
@@ -62,8 +62,6 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos,
 		{
 			if (m_type == TileType::LAND)
 			{
-				printInfo();
-
 				m_type = TileType::WATER;
 				SetTileTexture(waterTexture);
 			}
@@ -133,19 +131,15 @@ sf::Vector2f CTile::GetSize() const
 	return m_tile.getScale();
 }
 
-void CTile::printInfo()
-{
-	std::cout << "Tile" << std::endl;
-	std::cout << "Id: " << m_id << std::endl;
-	std::cout << "Type: " << static_cast<int>(m_type) << std::endl;
-	std::cout << "Coords.: [" << m_coords.x << ", " << m_coords.y << "]" << std::endl;
-	std::cout << std::endl;
-}
-
 // -------
 
 std::ostream& operator<<(std::ostream& os, const CTile& tile)
 {
-	os << static_cast<int>(tile.GetType());
+	os << "Tile" << std::endl;
+	os << "Id: " << tile.GetId() << std::endl;
+	os << "Type: " << static_cast<int>(tile.GetType()) << std::endl;
+	os << "Coords.: [" << tile.GetCoords().x << ", " << tile.GetCoords().y << "]" << std::endl;
+	os << std::endl;
+
 	return os;
 }

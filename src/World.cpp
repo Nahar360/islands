@@ -228,11 +228,6 @@ void CWorld::RemoveRow()
 	}
 }
 
-std::vector<std::vector<CTile>> CWorld::GetTiles() const
-{
-	return m_tiles;
-}
-
 void CWorld::Save(const std::string& worldFileName)
 {
 	std::string worldFileNamePath = std::string(WORLDS_PATH) + worldFileName;
