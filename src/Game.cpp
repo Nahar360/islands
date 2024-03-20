@@ -10,7 +10,9 @@ CGame::CGame() :
 
 void CGame::Run()
 {
+	// Initialisation
 	m_uiManager.Init(m_window);
+	m_world.Init();
 
 	sf::Clock clock = sf::Clock();
 	sf::Time previousTime = clock.getElapsedTime();

@@ -3,7 +3,6 @@
 
 extern int WORLD_COLS;
 extern int WORLD_ROWS;
-extern int TILE_SIZE_PIXELS;
 
 extern char WORLD_FILE_NAME_TO_SAVE[255];
 

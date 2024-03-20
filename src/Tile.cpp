@@ -2,44 +2,26 @@
 
 #include <iostream>
 
-CTile::CTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos, int size) :
+CTile::CTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos) :
 	m_id(id), m_type(type), m_coords(coords)
 {
-	// Load textures
-	m_waterTexture.loadFromFile("./src/textures/water.png");
-	m_landTexture.loadFromFile("./src/textures/land.png");
-
 	// Load font
 	m_font.loadFromFile("./src/fonts/arial.ttf");
 
-	// -----------
-
-	m_tile.setSize(sf::Vector2f(size, size));
-
-	m_tile.setOutlineColor(sf::Color::Black);
-
-	// Water
-	if (m_type == 0)
-	{
-		m_tile.setFillColor(sf::Color::Blue);
-		//m_tile.setTexture(m_waterTexture);
-	}
-	// Land
-	else if (m_type == 1)
-	{
-		m_tile.setFillColor(sf::Color(165, 42, 42));
-		//m_tile.setTexture(m_landTexture);
-	}
-
-	m_tile.setOutlineThickness(1);
+	// Position
 	m_tile.setPosition(pos);
 
 	// Text
 	m_idText.setString(std::to_string(GetId()));
-	m_idText.setCharacterSize(12);
+	m_idText.setCharacterSize(16);
 	m_idText.setFillColor(sf::Color::Black);
-	// m_idText.setStyle(sf::Text::Bold);
+	m_idText.setStyle(sf::Text::Bold);
 	m_idText.setPosition(m_tile.getPosition().x, m_tile.getPosition().y);
+}
+
+void CTile::SetTileTexture(const sf::Texture& texture)
+{
+	m_tile.setTexture(texture);
 }
 
 void CTile::Draw(sf::RenderWindow& window)
@@ -52,8 +34,9 @@ void CTile::Draw(sf::RenderWindow& window)
 	window.draw(m_idText);
 }
 
-
-bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
+// TODO: I do not like having to pass all textures here..., find a way around this
+// The problem is that the textures are created and stored in the world and not in the tiles...
+bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos, const sf::Texture& waterTexture, const sf::Texture& landTexture)
 {
 	sf::Vector2f mousePosFloat = sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 	if (m_tile.getGlobalBounds().contains(mousePosFloat))
@@ -67,7 +50,7 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
 				printInfo();
 
 				m_type = 1;
-				m_tile.setFillColor(sf::Color(165, 42, 42));
+				SetTileTexture(landTexture);
 			}
 			return true;
 		}
@@ -78,7 +61,7 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
 				printInfo();
 
 				m_type = 0;
-				m_tile.setFillColor(sf::Color::Blue);
+				SetTileTexture(waterTexture);
 			}
 			return true;
 		}
@@ -88,11 +71,6 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos)
 	}
 
 	return false;
-}
-
-sf::RectangleShape CTile::GetTile() const
-{
-	return m_tile;
 }
 
 sf::Color CTile::GetColor() const

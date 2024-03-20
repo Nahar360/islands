@@ -4,18 +4,25 @@
 #include "Tile.hpp"
 #include "UiSettings.hpp"
 
-#include <vector>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
-void CWorld::Init(int cols, int rows, int size)
+void CWorld::Init()
+{
+	// Load textures
+	m_waterTexture.loadFromFile(std::string(TEXTURES_PATH) + "water.png");
+	m_landTexture.loadFromFile(std::string(TEXTURES_PATH) + "land.png");
+}
+
+void CWorld::InitTiles(int cols, int rows)
 {	
 	std::vector<std::vector<int>> repr(rows, std::vector<int>(cols, 0));
 
-	InitTilesFromRepr(repr, size);
+	InitTilesFromRepr(repr);
 }
 
-void CWorld::InitRandom(int size)
+void CWorld::InitTilesRandom()
 {
 	std::vector<std::vector<int>> repr;
 
@@ -38,7 +45,7 @@ void CWorld::InitRandom(int size)
 		repr.push_back(row);
 	}
 
-	InitTilesFromRepr(repr, size);
+	InitTilesFromRepr(repr);
 }
 
 void CWorld::Clear()
@@ -46,7 +53,7 @@ void CWorld::Clear()
 	m_tiles.clear();
 }
 
-void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int size)
+void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
 {
 	m_tiles.clear();
 
@@ -59,15 +66,30 @@ void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int si
 		{
 			int tileType = repr[i][j];
 			sf::Vector2i coords(i, j);
-			sf::Vector2f pos((j + 1) * size, (i + 1) * size);
-
-			CTile tile((i * numColumns) + j, tileType, coords, pos, size);
+			const int textureSize = m_waterTexture.getSize().x; // y
+			sf::Vector2f pos((j + 1) * textureSize, (i + 1) * textureSize);
+			
+			const CTile tile = CreateTile((i * numColumns) + j, tileType, coords, pos);
 
 			tiles_row.push_back(tile);
 		}
 
 		m_tiles.push_back(tiles_row);
 	}
+}
+
+CTile CWorld::CreateTile(int id, int type, const sf::Vector2i& coords, const sf::Vector2f& pos)
+{
+	CTile tile(id, type, coords, pos);
+	if (type == 0) {
+		tile.SetTileTexture(m_waterTexture);
+	}
+	else if (type == 1)
+	{
+		tile.SetTileTexture(m_landTexture);
+	}
+
+	return tile;
 }
 
 void CWorld::RecalculateIds()
@@ -100,10 +122,9 @@ void CWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos
 	{
 		for (int j = 0; j < m_tiles[0].size(); j++)
 		{
-			if (m_tiles[i][j].MouseDetection(mouseButton, mousePos))
+			if (m_tiles[i][j].MouseDetection(mouseButton, mousePos, m_waterTexture, m_landTexture))
 			{
 				m_tiles[i][j].SetSelected(true);
-				int id = m_tiles[i][j].GetId();
 
 				break;
 			}
@@ -138,10 +159,10 @@ void CWorld::AddColumn(int tileType)
 			const int id = -1; // will be recalculated later
 			const int type = tileType == 2 ? std::rand() % 2 : tileType; // 2 -> random
 			const sf::Vector2i coords(lastTileInRow.GetCoords().x, lastTileInRow.GetCoords().y + 1);
-			const int size = TILE_SIZE_PIXELS;
-			const sf::Vector2f pos(lastTileInRow.GetPosition().x + size, lastTileInRow.GetPosition().y);
+			const int textureSize = m_waterTexture.getSize().x; // y
+			const sf::Vector2f pos(lastTileInRow.GetPosition().x + textureSize, lastTileInRow.GetPosition().y);
 
-			CTile newTile(id, type, coords, pos, size);
+			const CTile newTile = CreateTile(id, type, coords, pos);
 			m_tiles[i].emplace_back(newTile);
 		}
 
@@ -152,7 +173,7 @@ void CWorld::AddColumn(int tileType)
 	else
 	{
 		// Initialise a world with a single tile
-		Init(1, 1);
+		InitTiles(1, 1);
 	}
 }
 
@@ -185,10 +206,10 @@ void CWorld::AddRow(int tileType)
 			const int id = -1; // will be recalculated right after
 			const int type = tileType == 2 ? std::rand() % 2 : tileType; // 2 -> random
 			const sf::Vector2i coords(tileAbove.GetCoords().x + 1, tileAbove.GetCoords().y);
-			const int size = TILE_SIZE_PIXELS;
-			const sf::Vector2f pos(tileAbove.GetPosition().x, tileAbove.GetPosition().y + size);
+			const int textureSize = m_waterTexture.getSize().x; // y
+			const sf::Vector2f pos(tileAbove.GetPosition().x, tileAbove.GetPosition().y + textureSize);
 
-			CTile newTile(id, type, coords, pos, size);
+			const CTile newTile = CreateTile(id, type, coords, pos);
 			newRow.emplace_back(newTile);
 		}
 
@@ -201,7 +222,7 @@ void CWorld::AddRow(int tileType)
 	else
 	{
 		// Initialise a world with a single tile
-		Init(1, 1);
+		InitTiles(1, 1);
 	}
 }
 
@@ -262,7 +283,7 @@ void CWorld::Load(const std::string& worldFileName)
 		worldFile.close();
 	}
 
-	InitTilesFromRepr(repr, TILE_SIZE_PIXELS);
+	InitTilesFromRepr(repr);
 }
 
 int CWorld::DetectIslands()

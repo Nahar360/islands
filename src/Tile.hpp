@@ -23,15 +23,15 @@ TileType WhatTileType(int type)
 class CTile
 {
 public:
-	CTile(int id, int type, sf::Vector2i coords, sf::Vector2f pos, int size);
+	CTile(int id, int type, sf::Vector2i coords, sf::Vector2f pos);
 
 	~CTile() = default;
 
-	// void Init(sf::Vector2f pos);
-	void Draw(sf::RenderWindow& window);
-	bool MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos);
+	void SetTileTexture(const sf::Texture& texture);
 
-	sf::RectangleShape GetTile() const;
+	void Draw(sf::RenderWindow& window);
+	bool MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos, const sf::Texture& waterTexture, const sf::Texture& landTexture);
+
 	sf::Color GetColor() const;
 
 	void SetId(int id);
@@ -45,26 +45,21 @@ public:
 	void SetSelected(const bool selected);
 	bool GetSelected() const;
 
-	sf::Vector2f GetSize() const { return m_tile.getSize(); }
+	sf::Vector2f GetSize() const { return m_tile.getScale(); }
 
 	sf::Vector2f GetPosition() const;
 
 private:
-	sf::RectangleShape m_tile;
-	// sf::Sprite m_tile;
+	sf::Sprite m_tile;
 
 	sf::Color m_color;
 	sf::Font m_font;
 	sf::Text m_idText;
-
-	sf::Texture m_waterTexture;
-	sf::Texture m_landTexture;
 	
 	int m_id;
 	int m_type;
 	TileType m_tileType;
 	sf::Vector2i m_coords;	
-	// sf::Vector2f m_pos;
 
 	bool m_selected = false;
 

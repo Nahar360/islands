@@ -69,8 +69,6 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 
 	ImGui::TextColored(ImVec4(1, 1, 0.5, 1), "Create World");
 
-	ImGui::InputInt("Tile size (pixels)", &TILE_SIZE_PIXELS);
-
 	InitialiseWorld(world);
 	ImGui::SameLine();
 	InitialiseRandomWorld(world);
@@ -159,7 +157,7 @@ void CUiManager::InitialiseWorld(CWorld& world)
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
 	if (ImGui::Button("Init. world"))
 	{
-		world.Init(WORLD_COLS, WORLD_ROWS, TILE_SIZE_PIXELS);
+		world.InitTiles(WORLD_COLS, WORLD_ROWS);
 	}
 	ImGui::PopStyleColor(2);
 }
@@ -170,7 +168,7 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.9f, 0.4f, 1.0f));
 	if (ImGui::Button("Init. random world"))
 	{
-		world.InitRandom(TILE_SIZE_PIXELS);
+		world.InitTilesRandom();
 	}
 	ImGui::PopStyleColor(2);
 }

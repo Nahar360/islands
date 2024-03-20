@@ -2,7 +2,6 @@
 #define WORLD_HPP
 
 #include "Tile.hpp"
-#include "UiSettings.hpp"
 
 #include <vector>
 
@@ -12,8 +11,10 @@ public:
 	CWorld() = default;
 	~CWorld() = default;
 
-	void Init(int cols, int rows, int size = TILE_SIZE_PIXELS);
-	void InitRandom(int size);
+	void Init();
+
+	void InitTiles(int cols, int rows);
+	void InitTilesRandom();
 	void Clear();
 	void Update(sf::RenderWindow& window);
 	void MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos);
@@ -33,11 +34,18 @@ public:
 	int DetectIslands();
 
 private:
+	// Textures
+	sf::Texture m_waterTexture;
+	sf::Texture m_landTexture;
+
+	// Tiles
 	std::vector<std::vector<CTile>> m_tiles;
 
+	// Islands
 	std::vector<std::vector<int>> m_islands;  // vector of vector of tile ids
 
-	void InitTilesFromRepr(const std::vector<std::vector<int>>& repr, int size);
+	void InitTilesFromRepr(const std::vector<std::vector<int>>& repr);
+	CTile CreateTile(int id, int type, const sf::Vector2i& coords, const sf::Vector2f& pos);
 
 	void RecalculateIds();
 
