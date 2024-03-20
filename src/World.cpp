@@ -7,12 +7,12 @@
 #include "GlobalSettings.hpp"
 #include "Tile.hpp"
 
-
 void CWorld::Init()
 {
     // Load textures
-    m_waterTexture.loadFromFile(std::string(GlobalSettings::TEXTURES_PATH) + "water.png");
-    m_landTexture.loadFromFile(std::string(GlobalSettings::TEXTURES_PATH) + "land.png");
+    const std::string texturesPath = std::string(GlobalSettings::TEXTURES_PATH);
+    m_waterTexture.loadFromFile(texturesPath + "water.png");
+    m_landTexture.loadFromFile(texturesPath + "land.png");
 }
 
 void CWorld::InitTiles(int cols, int rows)
@@ -46,11 +46,6 @@ void CWorld::InitTilesRandom()
     }
 
     InitTilesFromRepr(repr);
-}
-
-void CWorld::Clear()
-{
-    m_tiles.clear();
 }
 
 void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
@@ -92,6 +87,11 @@ CTile CWorld::CreateTile(int id, int type, const sf::Vector2i& coords, const sf:
     }
 
     return tile;
+}
+
+void CWorld::Clear()
+{
+    m_tiles.clear();
 }
 
 void CWorld::RecalculateIds()
@@ -138,7 +138,7 @@ void CWorld::PrintRepresentation()
     {
         for (int j = 0; j < m_tiles[0].size(); j++)
         {
-            std::cout << m_tiles[i][j];
+            std::cout << static_cast<int>(m_tiles[i][j].GetType());
         }
         std::cout << std::endl;
     }
@@ -243,7 +243,12 @@ void CWorld::Save(const std::string& worldFileName)
             {
                 worldFile << std::to_string(static_cast<int>(m_tiles[i][j].GetType()));
             }
-            worldFile << std::endl;
+
+            // We do not need a newline at the end of the file
+            if (i != m_tiles.size() - 1)
+            {
+                worldFile << std::endl;
+            }
         }
 
         worldFile.close();
