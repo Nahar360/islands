@@ -25,6 +25,7 @@ public:
 	void SetType(TileType type);
 	TileType GetType() const;
 
+	bool IsTypeWater() const;
 	bool IsTypeLand() const;
 
 	void SetCoords(const sf::Vector2i& coords);
@@ -32,9 +33,6 @@ public:
 
 	void SetPosition(const sf::Vector2f& pos);
 	sf::Vector2f GetPosition() const;
-
-	void SetSelected(bool selected);
-	bool GetSelected() const;
 
 	sf::Vector2f GetSize() const;
 
@@ -47,8 +45,6 @@ private:
 	int m_id;
 	TileType m_type;
 	sf::Vector2i m_coords;
-
-	bool m_selected = false;
 
 	// -------
 

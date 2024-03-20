@@ -98,6 +98,11 @@ void CTile::SetType(TileType type)
 	m_type = type;
 }
 
+bool CTile::IsTypeWater() const
+{
+	return m_type == TileType::WATER;
+}
+
 bool CTile::IsTypeLand() const
 {
 	return m_type == TileType::LAND;
@@ -121,16 +126,6 @@ void CTile::SetPosition(const sf::Vector2f &pos)
 sf::Vector2f CTile::GetPosition() const
 {
 	return m_tile.getPosition();
-}
-
-bool CTile::GetSelected() const
-{
-	return m_selected;
-}
-
-void CTile::SetSelected(bool selected)
-{
-	m_selected = selected;
 }
 
 sf::Vector2f CTile::GetSize() const

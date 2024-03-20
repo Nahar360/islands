@@ -56,7 +56,7 @@ void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
 {
 	m_tiles.clear();
 
-	// initialise tiles depending on representation
+	// Initialise tiles depending on representation
 	for (int i = 0; i < repr.size(); i++)
 	{
 		std::vector<CTile> tiles_row;
@@ -124,13 +124,7 @@ void CWorld::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos
 		{
 			if (m_tiles[i][j].MouseDetection(mouseButton, mousePos, m_waterTexture, m_landTexture))
 			{
-				m_tiles[i][j].SetSelected(true);
-
 				break;
-			}
-			else
-			{
-				m_tiles[i][j].SetSelected(false);
 			}
 		}
 	}
