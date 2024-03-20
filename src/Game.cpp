@@ -18,6 +18,7 @@ void CGame::Run()
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Time currentTime;
 
+	// Game loop
 	while (m_window.isOpen())
 	{
 		currentTime = clock.getElapsedTime();

@@ -1,12 +1,15 @@
 #include "Tile.hpp"
 
+#include "GlobalSettings.hpp"
+#include "SFML/System/Vector2.hpp"
+
 #include <iostream>
 
 CTile::CTile(int id , int type, sf::Vector2i coords, sf::Vector2f pos) :
 	m_id(id), m_type(type), m_coords(coords)
 {
 	// Load font
-	m_font.loadFromFile("./src/fonts/arial.ttf");
+	m_font.loadFromFile(std::string(FONTS_PATH) + "arial.ttf");
 
 	// Position
 	m_tile.setPosition(pos);
@@ -73,11 +76,6 @@ bool CTile::MouseDetection(sf::Mouse::Button mouseButton, sf::Vector2i mousePos,
 	return false;
 }
 
-sf::Color CTile::GetColor() const
-{
-	return m_color;
-}
-
 void CTile::SetId(int id)
 {
 	m_id = id;
@@ -87,11 +85,6 @@ void CTile::SetId(int id)
 int CTile::GetId() const
 {
 	return m_id;
-}
-
-sf::Vector2i CTile::GetCoords() const
-{
-	return m_coords;
 }
 
 int CTile::GetType() const
@@ -104,6 +97,26 @@ void CTile::SetType(const int type)
 	m_type = type;
 }
 
+void CTile::SetCoords(const sf::Vector2i &coords)
+{
+	m_coords = coords;
+}
+
+sf::Vector2i CTile::GetCoords() const
+{
+	return m_coords;
+}
+
+void CTile::SetPosition(const sf::Vector2f &pos)
+{
+	m_tile.setPosition(pos);
+}
+
+sf::Vector2f CTile::GetPosition() const
+{
+	return m_tile.getPosition();
+}
+
 bool CTile::GetSelected() const
 {
 	return m_selected;
@@ -114,9 +127,9 @@ void CTile::SetSelected(const bool selected)
 	m_selected = selected;
 }
 
-sf::Vector2f CTile::GetPosition() const
+sf::Vector2f CTile::GetSize() const
 {
-	return m_tile.getPosition();
+	return m_tile.getScale();
 }
 
 void CTile::printInfo()

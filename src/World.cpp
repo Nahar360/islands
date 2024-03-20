@@ -2,7 +2,6 @@
 
 #include "GlobalSettings.hpp"
 #include "Tile.hpp"
-#include "UiSettings.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -64,12 +63,13 @@ void CWorld::InitTilesFromRepr(const std::vector<std::vector<int>>& repr)
 		const int numColumns = repr[i].size();
 		for (int j = 0; j < numColumns; j++)
 		{
+			const int id = (i * numColumns) + j;
 			int tileType = repr[i][j];
 			sf::Vector2i coords(i, j);
 			const int textureSize = m_waterTexture.getSize().x; // y
 			sf::Vector2f pos((j + 1) * textureSize, (i + 1) * textureSize);
 			
-			const CTile tile = CreateTile((i * numColumns) + j, tileType, coords, pos);
+			const CTile tile = CreateTile(id, tileType, coords, pos);
 
 			tiles_row.push_back(tile);
 		}

@@ -59,6 +59,8 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 	ShowFPS(fps);
 
 	UpdateMousePosition(window);
+	
+	UpdateBackgroundColor();
 
 	// -------------------------
 	ImGui::Separator();
