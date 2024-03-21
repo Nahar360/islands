@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <string>
 
 #include "GlobalSettings.hpp"
 #include "imgui-SFML.h"
@@ -295,11 +296,31 @@ void CUiManager::DetectIslands(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.9f, 0.2f, 1.0f));
     if (ImGui::Button("Detect islands"))
     {
-        UiSettings::NUMBER_OF_ISLANDS = world.DetectIslands();
+        UiSettings::ISLANDS = world.DetectIslands();
     }
     ImGui::PopStyleColor(2);
 
-    ImGui::Text("Number of islands: %d", UiSettings::NUMBER_OF_ISLANDS);
+    PrintIslandsSummary();
+}
+
+void CUiManager::PrintIslandsSummary()
+{
+    ImGui::Text("Number of islands: %zu", UiSettings::ISLANDS.size());
+    for (int i = 0; i < UiSettings::ISLANDS.size(); i++)
+    {
+        std::string islandLog = "Island number " + std::to_string(i + 1) + ": { ";
+        for (int j = 0; j < UiSettings::ISLANDS[i].size(); j++)
+        {
+            islandLog += std::to_string(UiSettings::ISLANDS[i][j]);
+            if (j != UiSettings::ISLANDS[i].size() - 1)
+            {
+                islandLog += ", ";
+            }
+        }
+        islandLog += " }";
+
+        ImGui::BulletText("%s", islandLog.c_str());
+    }
 }
 
 void CUiManager::GetWorldsToLoad()

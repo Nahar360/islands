@@ -47,6 +47,7 @@ private:
     void LoadWorld(CWorld& world);
 
     void DetectIslands(CWorld& world);
+    void PrintIslandsSummary();
 
     // Non-UI
     void GetWorldsToLoad();

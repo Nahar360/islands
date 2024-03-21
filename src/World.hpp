@@ -5,7 +5,6 @@
 
 #include "Tile.hpp"
 
-
 class CWorld
 {
 public:
@@ -30,7 +29,7 @@ public:
     void Save(const std::string& worldFileName);
     void Load(const std::string& worldFileName);
 
-    int DetectIslands();
+    std::vector<std::vector<int>> DetectIslands();
 
 private:
     // Textures

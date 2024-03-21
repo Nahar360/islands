@@ -6,7 +6,6 @@
 
 #include "GlobalSettings.hpp"
 #include "Tile.hpp"
-#include "UiSettings.hpp"
 
 void CWorld::Init()
 {
@@ -94,7 +93,6 @@ void CWorld::Clear()
 {
     m_tiles.clear();
     m_islands.clear();
-    UiSettings::NUMBER_OF_ISLANDS = 0;
 }
 
 void CWorld::RecalculateIds()
@@ -272,7 +270,7 @@ void CWorld::Load(const std::string& worldFileName)
             std::vector<int> row;
             for (int i = 0; i < line.length(); i++)
             {
-                int tileType = static_cast<int>(line[i]) - 48; // 48 is the ASCII value of 0
+                const int tileType = static_cast<int>(line[i]) - 48; // 48 is the ASCII value of 0
                 row.push_back(tileType);
             }
 
@@ -285,7 +283,7 @@ void CWorld::Load(const std::string& worldFileName)
     InitTilesFromRepr(repr);
 }
 
-int CWorld::DetectIslands()
+std::vector<std::vector<int>> CWorld::DetectIslands()
 {
     m_islands.clear();
 
@@ -307,22 +305,7 @@ int CWorld::DetectIslands()
         std::cout << std::endl;
     }
 
-    // Just printing...
-    for (int i = 0; i < m_islands.size(); i++)
-    {
-        std::cout << "Island number " << i + 1 << ": { ";
-        for (int j = 0; j < m_islands[i].size(); j++)
-        {
-            std::cout << m_islands[i][j];
-            if (j != m_islands[i].size() - 1)
-            {
-                std::cout << ", ";
-            }
-        }
-        std::cout << " }" << std::endl;
-    }
-
-    return m_islands.size();
+    return m_islands;
 }
 
 void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
