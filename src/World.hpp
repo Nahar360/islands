@@ -49,11 +49,11 @@ private:
     void RecalculateIds();
 
     // Detect Islands helper functions
-    void BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island);
+    void ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island);
     std::vector<int> GetNeighbourTileIds(const CTile& tile);
     void PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds);
     int GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset);
-    bool IsCoordOutOfBounds(sf::Vector2i coord);
+    bool IsCoordInBounds(sf::Vector2i coord);
     CTile GetIslandTileFromId(int id);
     bool TileIdAlreadyInIslands(int id);
 };

@@ -299,7 +299,7 @@ int CWorld::DetectIslands()
                 if (!TileIdAlreadyInIslands(tileId))
                 {
                     std::vector<int> island{tileId};
-                    BuildIslandFromLandTile(m_tiles[i][j], island);
+                    ExploreIslandFromLandTile(m_tiles[i][j], island);
                     m_islands.emplace_back(island);
                 }
             }
@@ -325,8 +325,10 @@ int CWorld::DetectIslands()
     return m_islands.size();
 }
 
-void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
+void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
 {
+    std::cout << "Exploring island from land tile with ID: " << landTile.GetId() << std::endl;
+
     std::vector<int> neighbourTileIds = GetNeighbourTileIds(landTile);
     PrintNeighbourTileIds(neighbourTileIds);
 
@@ -342,7 +344,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
                 if (!TileIdAlreadyInIslands(tile.GetId()))
                 {
                     island.emplace_back(tile.GetId());
-                    BuildIslandFromLandTile(tile, island);
+                    ExploreIslandFromLandTile(tile, island);
                 }
             }
         }
@@ -360,7 +362,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
             if (!TileIdAlreadyInIslands(aboveTile.GetId()))
             {
                 island.emplace_back(aboveTile.GetId());
-                BuildIslandFromLandTile(aboveTile, island);
+                ExploreIslandFromLandTile(aboveTile, island);
             }
         }
     }
@@ -374,7 +376,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
             if (!TileIdAlreadyInIslands(leftTile.GetId()))
             {
                 island.emplace_back(leftTile.GetId());
-                BuildIslandFromLandTile(leftTile, island);
+                ExploreIslandFromLandTile(leftTile, island);
             }
         }
     }
@@ -388,7 +390,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
             if (!TileIdAlreadyInIslands(belowTile.GetId()))
             {
                 island.emplace_back(belowTile.GetId());
-                BuildIslandFromLandTile(belowTile, island);
+                ExploreIslandFromLandTile(belowTile, island);
             }
         }
     }
@@ -402,7 +404,7 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
             if (!TileIdAlreadyInIslands(rightTile.GetId()))
             {
                 island.emplace_back(rightTile.GetId());
-                BuildIslandFromLandTile(rightTile, island);
+                ExploreIslandFromLandTile(rightTile, island);
             }
         }
     }
@@ -433,18 +435,28 @@ int CWorld::GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset)
     const auto& tileCoords = tile.GetCoords();
     const sf::Vector2i otherTileCoord = sf::Vector2i(tileCoords.x + offset.x, tileCoords.y + offset.y);
 
-    if (!IsCoordOutOfBounds(otherTileCoord))
+    if (IsCoordInBounds(otherTileCoord))
     {
-        return m_tiles[otherTileCoord.x][otherTileCoord.y].GetId();
+        const int otherTileId = m_tiles[otherTileCoord.x][otherTileCoord.y].GetId();
+        return otherTileId;
     }
 
     return -1;
 }
 
-bool CWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
+bool CWorld::IsCoordInBounds(const sf::Vector2i coord)
 {
-    // TODO: review m_tiles[coord.x].size() just in case
-    return coord.x >= 0 && coord.y >= 0 && coord.x < m_tiles.size() && coord.y < m_tiles[coord.x].size();
+    const int numCols = m_tiles[coord.x].size();
+    const int numRows = m_tiles.size();
+
+    const bool xCoordIsNotNegative = coord.x >= 0;
+    const bool yCoordIsNotNegative = coord.y >= 0;
+    const bool xCoordIsNotBiggerThanNumCols = coord.x < numCols;
+    const bool yCoordIsNotBiggerThanNumRows = coord.y < numRows;
+
+    const bool isCoordInBounds = xCoordIsNotNegative && yCoordIsNotNegative && xCoordIsNotBiggerThanNumCols && yCoordIsNotBiggerThanNumRows;
+
+    return isCoordInBounds;
 }
 
 CTile CWorld::GetIslandTileFromId(int id)
