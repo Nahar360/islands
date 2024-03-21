@@ -2,16 +2,17 @@
 
 #include <algorithm> // for std::sort
 #include <filesystem>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <string>
 
 #include "GlobalSettings.hpp"
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "UiSettings.hpp"
+
 
 void CUiManager::Init(sf::RenderWindow& window)
 {

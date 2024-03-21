@@ -6,8 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "SFML/System/Vector2.hpp"
-#include "TileType.hpp" // clang-format error
-
+#include "TileType.hpp"
 
 class CTile
 {

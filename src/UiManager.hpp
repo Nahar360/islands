@@ -21,7 +21,7 @@ public:
 
 private:
     sf::Clock m_deltaClock;
-    
+
     std::vector<std::string> m_worldsToLoad;
     std::vector<std::string> m_tileTypesAvailable{"water", "land", "random"};
 
