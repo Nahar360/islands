@@ -1,5 +1,6 @@
 #include "UiManager.hpp"
 
+#include <algorithm> // for std::sort
 #include <filesystem>
 
 #include <SFML/Graphics.hpp>
@@ -10,7 +11,6 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "UiSettings.hpp"
-
 
 void CUiManager::Init(sf::RenderWindow& window)
 {
@@ -129,7 +129,8 @@ void CUiManager::ShowFPS(float fps)
 void CUiManager::UpdateMousePosition(sf::RenderWindow& window)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    if (mousePos.x >= 0 && mousePos.x <= GlobalSettings::WINDOW_WIDTH && mousePos.y >= 0 && mousePos.y <= GlobalSettings::WINDOW_HEIGHT)
+    if (mousePos.x >= 0 && mousePos.x <= GlobalSettings::WINDOW_WIDTH && mousePos.y >= 0 &&
+        mousePos.y <= GlobalSettings::WINDOW_HEIGHT)
     {
         ImGui::Text("Mouse position: (%d, %d)", mousePos.x, mousePos.y);
     }
@@ -313,4 +314,10 @@ void CUiManager::GetWorldsToLoad()
             m_worldsToLoad.emplace_back(path.filename().string());
         }
     }
+
+    // Sort world files alphabetically
+    std::sort(
+        m_worldsToLoad.begin(),
+        m_worldsToLoad.end(),
+        [](const std::string& a, const std::string& b) -> bool { return a < b; });
 }

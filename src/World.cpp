@@ -330,20 +330,40 @@ void CWorld::BuildIslandFromLandTile(const CTile& landTile, std::vector<int>& is
     std::vector<int> neighbourTileIds = GetNeighbourTileIds(landTile);
     PrintNeighbourTileIds(neighbourTileIds);
 
-    // ABOVE
-    // TODO: can be spared?
-    /*if (neighbourTileIds[0] != -1)
+    // ALL TOGETHER for whenever it's working correctly
+    /*
+    for (int i = 0; i < neighbourTileIds.size(); i++)
     {
-            const CTile aboveTile = GetIslandTileFromId(neighbourTileIds[0]);
-            if (aboveTile.GetType() == 1)
+        if (neighbourTileIds[i] != -1)
+        {
+            const CTile tile = GetIslandTileFromId(neighbourTileIds[i]);
+            if (tile.IsTypeLand())
             {
-                    if (!TileIdAlreadyInIslands(aboveTile.GetId()))
-                    {
-                            island.emplace_back(aboveTile.GetId());
-                            BuildIslandFromLandTile(aboveTile, island);
-                    }
+                if (!TileIdAlreadyInIslands(tile.GetId()))
+                {
+                    island.emplace_back(tile.GetId());
+                    BuildIslandFromLandTile(tile, island);
+                }
             }
-    }*/
+        }
+    }
+    */
+
+    // ONE BY ONE
+
+    // ABOVE
+    if (neighbourTileIds[0] != -1)
+    {
+        const CTile aboveTile = GetIslandTileFromId(neighbourTileIds[0]);
+        if (aboveTile.IsTypeLand())
+        {
+            if (!TileIdAlreadyInIslands(aboveTile.GetId()))
+            {
+                island.emplace_back(aboveTile.GetId());
+                BuildIslandFromLandTile(aboveTile, island);
+            }
+        }
+    }
 
     // LEFT
     if (neighbourTileIds[1] != -1)
@@ -423,12 +443,8 @@ int CWorld::GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset)
 
 bool CWorld::IsCoordOutOfBounds(const sf::Vector2i coord)
 {
-    if (coord.x >= 0 && coord.y >= 0 && coord.x < m_tiles.size() && coord.y < m_tiles[coord.x].size())
-    {
-        return false;
-    }
-
-    return true;
+    // TODO: review m_tiles[coord.x].size() just in case
+    return coord.x >= 0 && coord.y >= 0 && coord.x < m_tiles.size() && coord.y < m_tiles[coord.x].size();
 }
 
 CTile CWorld::GetIslandTileFromId(int id)
