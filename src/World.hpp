@@ -55,7 +55,9 @@ private:
     int GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset);
     bool IsCoordInBounds(sf::Vector2i coord);
     CTile GetIslandTileFromId(int id);
+
     bool TileIdAlreadyInIslands(int id);
+    bool TileIdAlreadyInAGivenIsland(int id, const std::vector<int>& island);
 };
 
 #endif // WORLD_HPP

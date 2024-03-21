@@ -332,8 +332,6 @@ void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& 
     std::vector<int> neighbourTileIds = GetNeighbourTileIds(landTile);
     PrintNeighbourTileIds(neighbourTileIds);
 
-    // ALL TOGETHER for whenever it's working correctly
-    /*
     for (int i = 0; i < neighbourTileIds.size(); i++)
     {
         if (neighbourTileIds[i] != -1)
@@ -341,70 +339,11 @@ void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& 
             const CTile tile = GetIslandTileFromId(neighbourTileIds[i]);
             if (tile.IsTypeLand())
             {
-                if (!TileIdAlreadyInIslands(tile.GetId()))
+                if (!TileIdAlreadyInAGivenIsland(tile.GetId(), island))
                 {
                     island.emplace_back(tile.GetId());
                     ExploreIslandFromLandTile(tile, island);
                 }
-            }
-        }
-    }
-    */
-
-    // ONE BY ONE
-
-    // ABOVE
-    if (neighbourTileIds[0] != -1)
-    {
-        const CTile aboveTile = GetIslandTileFromId(neighbourTileIds[0]);
-        if (aboveTile.IsTypeLand())
-        {
-            if (!TileIdAlreadyInIslands(aboveTile.GetId()))
-            {
-                island.emplace_back(aboveTile.GetId());
-                ExploreIslandFromLandTile(aboveTile, island);
-            }
-        }
-    }
-
-    // LEFT
-    if (neighbourTileIds[1] != -1)
-    {
-        const CTile leftTile = GetIslandTileFromId(neighbourTileIds[1]);
-        if (leftTile.IsTypeLand())
-        {
-            if (!TileIdAlreadyInIslands(leftTile.GetId()))
-            {
-                island.emplace_back(leftTile.GetId());
-                ExploreIslandFromLandTile(leftTile, island);
-            }
-        }
-    }
-
-    // BELOW
-    if (neighbourTileIds[2] != -1)
-    {
-        const CTile belowTile = GetIslandTileFromId(neighbourTileIds[2]);
-        if (belowTile.IsTypeLand())
-        {
-            if (!TileIdAlreadyInIslands(belowTile.GetId()))
-            {
-                island.emplace_back(belowTile.GetId());
-                ExploreIslandFromLandTile(belowTile, island);
-            }
-        }
-    }
-
-    // RIGHT
-    if (neighbourTileIds[3] != -1)
-    {
-        const CTile rightTile = GetIslandTileFromId(neighbourTileIds[3]);
-        if (rightTile.IsTypeLand())
-        {
-            if (!TileIdAlreadyInIslands(rightTile.GetId()))
-            {
-                island.emplace_back(rightTile.GetId());
-                ExploreIslandFromLandTile(rightTile, island);
             }
         }
     }
@@ -424,10 +363,13 @@ std::vector<int> CWorld::GetNeighbourTileIds(const CTile& tile)
 
 void CWorld::PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds)
 {
+    // clang-format off
     std::cout << "Above: " << neighbourTileIds[0] << std::endl;
-    std::cout << "Left: " << neighbourTileIds[1] << std::endl;
+    std::cout << "Left: "  << neighbourTileIds[1] << std::endl;
     std::cout << "Below: " << neighbourTileIds[2] << std::endl;
     std::cout << "Right: " << neighbourTileIds[3] << std::endl;
+    // clang-format on
+    std::cout << std::endl;
 }
 
 int CWorld::GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset)
@@ -451,10 +393,11 @@ bool CWorld::IsCoordInBounds(const sf::Vector2i coord)
 
     const bool xCoordIsNotNegative = coord.x >= 0;
     const bool yCoordIsNotNegative = coord.y >= 0;
-    const bool xCoordIsNotBiggerThanNumCols = coord.x < numCols;
-    const bool yCoordIsNotBiggerThanNumRows = coord.y < numRows;
+    const bool xCoordIsNotBiggerThanNumCols = coord.x < numRows;
+    const bool yCoordIsNotBiggerThanNumRows = coord.y < numCols;
 
-    const bool isCoordInBounds = xCoordIsNotNegative && yCoordIsNotNegative && xCoordIsNotBiggerThanNumCols && yCoordIsNotBiggerThanNumRows;
+    const bool isCoordInBounds =
+        xCoordIsNotNegative && yCoordIsNotNegative && xCoordIsNotBiggerThanNumCols && yCoordIsNotBiggerThanNumRows;
 
     return isCoordInBounds;
 }
@@ -487,6 +430,19 @@ bool CWorld::TileIdAlreadyInIslands(int id)
             {
                 return true;
             }
+        }
+    }
+
+    return false;
+}
+
+bool CWorld::TileIdAlreadyInAGivenIsland(int id, const std::vector<int>& island)
+{
+    for (int i = 0; i < island.size(); i++)
+    {
+        if (id == island[i])
+        {
+            return true;
         }
     }
 
