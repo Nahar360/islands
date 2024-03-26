@@ -52,10 +52,10 @@ void CGame::CheckEvents()
         {
             m_window.close();
         }
-    }
 
-    if (event.type == sf::Event::MouseButtonPressed)
-    {
-        m_world.MouseDetection(event.mouseButton.button, sf::Mouse::getPosition(m_window));
+        if (event.type == sf::Event::MouseButtonPressed)
+        {
+            m_world.MouseDetection(event.mouseButton.button, sf::Mouse::getPosition(m_window));
+        }
     }
 }
