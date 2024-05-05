@@ -19,6 +19,8 @@ public:
     void Run(sf::RenderWindow& window, CWorld& world, float fps);
     void Render(sf::RenderWindow& window);
 
+    void DetectIslands(CWorld& world);
+
 private:
     sf::Clock m_deltaClock;
 
@@ -30,6 +32,8 @@ private:
     void Begin();
     void HandleUi(sf::RenderWindow& window, CWorld& world, float fps);
     void End();
+
+    void Reload();
 
     void UpdateWindowTitle(sf::RenderWindow& window);
     void ShowFPS(float fps);
@@ -51,7 +55,6 @@ private:
     // Non-UI
     void ClearWorldAndUI(CWorld& world);
     void GetWorldsToLoad();
-    void DetectIslands(CWorld& world);
 };
 
 #endif // UI_MANAGER_HPP

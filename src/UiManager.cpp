@@ -228,6 +228,9 @@ void CUiManager::EditWorld(CWorld& world)
     {
         world.AddRow(UiSettings::WORLD_CURRENT_TYPE);
     }
+
+    // Re-calculate islands because the world has changed
+    DetectIslands(world);
 }
 
 void CUiManager::ClearWorld(CWorld& world)

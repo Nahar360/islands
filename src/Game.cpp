@@ -56,6 +56,9 @@ void CGame::CheckEvents()
         if (event.type == sf::Event::MouseButtonPressed)
         {
             m_world.MouseDetection(event.mouseButton.button, sf::Mouse::getPosition(m_window));
+            
+            // Re-calculate islands because the world has changed
+            m_uiManager.DetectIslands(m_world);
         }
     }
 }
