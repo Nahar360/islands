@@ -310,7 +310,6 @@ std::vector<std::vector<int>> CWorld::DetectIslands()
                 }
             }
         }
-        std::cout << std::endl;
     }
 
     return m_islands;
