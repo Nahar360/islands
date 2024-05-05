@@ -1,6 +1,6 @@
 #include "World.hpp"
 
-#include <climits>
+#include <climits> // for INT_MAX
 #include <fstream>
 #include <iostream>
 #include <set>
