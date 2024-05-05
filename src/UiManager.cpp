@@ -256,8 +256,15 @@ void CUiManager::SaveWorld(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.7f, 0.2f, 1.0f));
     if (ImGui::Button("Save world (to .txt file)"))
     {
-        world.Save(std::string(UiSettings::WORLD_FILE_NAME_TO_SAVE));
-        GetWorldsToLoad();
+        const std::string worldFileNameToSave = std::string(UiSettings::WORLD_FILE_NAME_TO_SAVE);
+        if (worldFileNameToSave != ".txt")
+        {
+            const bool saved = world.Save(worldFileNameToSave);
+            if (saved)
+            {
+                GetWorldsToLoad();
+            }
+        }
     }
     ImGui::PopStyleColor(2);
 }

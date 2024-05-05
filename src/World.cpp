@@ -233,10 +233,14 @@ void CWorld::RemoveRow()
     }
 }
 
-void CWorld::Save(const std::string& worldFileName)
+bool CWorld::Save(const std::string& worldFileName)
 {
-    std::string worldFileNamePath = std::string(GlobalSettings::WORLDS_PATH) + worldFileName;
+    if (m_tiles.empty())
+    {
+        return false;
+    }
 
+    std::string worldFileNamePath = std::string(GlobalSettings::WORLDS_PATH) + worldFileName;
     std::ofstream worldFile(worldFileNamePath);
     if (worldFile.is_open())
     {
@@ -256,6 +260,8 @@ void CWorld::Save(const std::string& worldFileName)
 
         worldFile.close();
     }
+
+    return true;
 }
 
 void CWorld::Load(const std::string& worldFileName)

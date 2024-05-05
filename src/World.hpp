@@ -26,7 +26,7 @@ public:
 
     void PrintRepresentation();
 
-    void Save(const std::string& worldFileName);
+    bool Save(const std::string& worldFileName);
     void Load(const std::string& worldFileName);
 
     std::vector<std::vector<int>> DetectIslands();
