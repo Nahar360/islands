@@ -219,12 +219,12 @@ void CUiManager::EditWorld(CWorld& world)
 
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
     ImGui::SameLine();
-    if (ImGui::ArrowButton("##leftRow", ImGuiDir_Left))
+    if (ImGui::ArrowButton("##upRow", ImGuiDir_Up))
     {
         world.RemoveRow();
     }
     ImGui::SameLine();
-    if (ImGui::ArrowButton("##rightRow", ImGuiDir_Right))
+    if (ImGui::ArrowButton("##downRow", ImGuiDir_Down))
     {
         world.AddRow(UiSettings::WORLD_CURRENT_TYPE);
     }
