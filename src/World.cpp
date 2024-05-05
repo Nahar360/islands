@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "GlobalSettings.hpp"
-#include "SFML/System/Vector2.hpp"
 #include "Tile.hpp"
 
 void CWorld::Init()
