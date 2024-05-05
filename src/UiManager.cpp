@@ -229,6 +229,7 @@ void CUiManager::ClearWorld(CWorld& world)
     if (ImGui::Button("Clear world"))
     {
         world.Clear();
+        UiSettings::ISLANDS.clear();
     }
     ImGui::PopStyleColor(2);
 }
