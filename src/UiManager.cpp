@@ -161,6 +161,7 @@ void CUiManager::InitialiseWorld(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.6f, 0.1f, 1.0f));
     if (ImGui::Button("Init. world"))
     {
+        ClearWorldAndUI(world);
         world.InitTiles(UiSettings::WORLD_COLS, UiSettings::WORLD_ROWS);
     }
     ImGui::PopStyleColor(2);
@@ -172,6 +173,7 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.9f, 0.4f, 1.0f));
     if (ImGui::Button("Init. random world"))
     {
+        ClearWorldAndUI(world);
         world.InitTilesRandom();
     }
     ImGui::PopStyleColor(2);
@@ -228,8 +230,7 @@ void CUiManager::ClearWorld(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.2f, 0.1f, 1.0f));
     if (ImGui::Button("Clear world"))
     {
-        world.Clear();
-        UiSettings::ISLANDS.clear();
+        ClearWorldAndUI(world);
     }
     ImGui::PopStyleColor(2);
 }
@@ -287,6 +288,7 @@ void CUiManager::LoadWorld(CWorld& world)
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f, 0.5f, 0.0f, 1.0f));
     if (ImGui::Button("Load world (from .txt file)"))
     {
+        ClearWorldAndUI(world);
         world.Load(m_worldsToLoad[UiSettings::WORLD_CURRENT_INDEX]);
     }
     ImGui::PopStyleColor(2);
@@ -299,10 +301,12 @@ void CUiManager::DetectIslands(CWorld& world)
     if (ImGui::Button("Detect islands"))
     {
         UiSettings::ISLANDS = world.DetectIslands();
+        UiSettings::NUM_UNIQUE_ISLANDS = world.GetNumUniqueIslands();
     }
     ImGui::PopStyleColor(2);
 
     PrintIslandsSummary();
+    PrintUniqueIslandsSummary();
 }
 
 void CUiManager::PrintIslandsSummary()
@@ -310,7 +314,7 @@ void CUiManager::PrintIslandsSummary()
     ImGui::Text("Number of islands: %zu", UiSettings::ISLANDS.size());
     for (int i = 0; i < UiSettings::ISLANDS.size(); i++)
     {
-        std::string islandLog = "Island number " + std::to_string(i + 1) + ": { ";
+        std::string islandLog = "#" + std::to_string(i + 1) + ": { ";
         for (int j = 0; j < UiSettings::ISLANDS[i].size(); j++)
         {
             islandLog += std::to_string(UiSettings::ISLANDS[i][j]);
@@ -323,6 +327,18 @@ void CUiManager::PrintIslandsSummary()
 
         ImGui::BulletText("%s", islandLog.c_str());
     }
+}
+
+void CUiManager::PrintUniqueIslandsSummary()
+{
+    ImGui::Text("Number of unique islands: %d", UiSettings::NUM_UNIQUE_ISLANDS);
+}
+
+void CUiManager::ClearWorldAndUI(CWorld& world)
+{
+    world.Clear();
+    UiSettings::ISLANDS.clear();
+    UiSettings::NUM_UNIQUE_ISLANDS = 0;
 }
 
 void CUiManager::GetWorldsToLoad()

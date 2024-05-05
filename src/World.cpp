@@ -1,11 +1,23 @@
 #include "World.hpp"
 
+#include <climits>
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <vector>
 
 #include "GlobalSettings.hpp"
+#include "SFML/System/Vector2.hpp"
 #include "Tile.hpp"
+
+namespace sf {
+    bool operator<(const sf::Vector2i& lhs, const sf::Vector2i& rhs)
+    {
+        if (lhs.x < rhs.x) return true;
+        if (lhs.x > rhs.x) return false;
+        return lhs.y < rhs.y;
+    }
+}
 
 void CWorld::Init()
 {
@@ -430,4 +442,64 @@ bool CWorld::TileIdAlreadyInAGivenIsland(int id, const std::vector<int>& island)
     }
 
     return false;
+}
+
+int CWorld::GetNumUniqueIslands()
+{
+    std::vector<std::vector<sf::Vector2i>> islandsShifted; // vector of vector of tile ids
+
+    // First, temporarily create a vector of islands coordinates shifted to the origin
+    for (int i = 0; i < m_islands.size(); i++)
+    {
+        const std::vector<int> islandIds = m_islands[i];
+
+        int minX = INT_MAX;
+        int minY = INT_MAX;
+        for (int j = 0; j < islandIds.size(); j++)
+        {
+            // Get the coords of each tile
+            const CTile islandTile = GetIslandTileFromId(islandIds[j]);
+            const sf::Vector2i islandTileCoords = islandTile.GetCoords();
+
+            // Get the min X and min Y coordinates
+            const int xCoord = islandTileCoords.x;
+            const int yCoord = islandTileCoords.y;
+
+            if (xCoord < minX)
+            {
+                minX = xCoord;
+            }
+
+            if (yCoord < minY)
+            {
+                minY = yCoord;
+            }
+        }
+
+        std::vector<sf::Vector2i> islandShifted;
+        const sf::Vector2i minCoords{minX, minY};
+        // Shift the whole island relative to the origin
+        for (int j = 0; j < islandIds.size(); j++)
+        {
+            const CTile islandTile = GetIslandTileFromId(islandIds[j]);
+            const sf::Vector2i islandTileCoords = islandTile.GetCoords();
+            // Then, subtract those minimums from each coordinate
+            const sf::Vector2i shiftedCoords = islandTileCoords - minCoords;
+            // TODO: getTileIdFromCoords so we have a vector of ids and not coordinates
+
+            islandShifted.push_back(shiftedCoords);
+        }
+
+        islandsShifted.emplace_back(islandShifted);
+    }
+
+    // Now we have all islands (coordinates) shifted to the origin
+    // we insert them to a set to get unique ones
+    std::set<std::vector<sf::Vector2i>> uniqueIslands;
+    for (const std::vector<sf::Vector2i>& islandShifted : islandsShifted)
+    {
+        uniqueIslands.insert(islandShifted);
+    }
+
+    return uniqueIslands.size();
 }

@@ -48,8 +48,10 @@ private:
 
     void DetectIslands(CWorld& world);
     void PrintIslandsSummary();
+    void PrintUniqueIslandsSummary();
 
     // Non-UI
+    void ClearWorldAndUI(CWorld& world);
     void GetWorldsToLoad();
 };
 

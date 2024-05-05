@@ -31,6 +31,8 @@ public:
 
     std::vector<std::vector<int>> DetectIslands();
 
+    int GetNumUniqueIslands();
+
 private:
     // Textures
     sf::Texture m_waterTexture;

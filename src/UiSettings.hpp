@@ -12,6 +12,8 @@ extern char WORLD_FILE_NAME_TO_SAVE[255];
 
 extern std::vector<std::vector<int>> ISLANDS;
 
+extern int NUM_UNIQUE_ISLANDS;
+
 extern int WORLD_CURRENT_TYPE;
 extern int WORLD_CURRENT_INDEX;
 } // namespace UiSettings
