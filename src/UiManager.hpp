@@ -46,13 +46,12 @@ private:
     void SaveWorld(CWorld& world);
     void LoadWorld(CWorld& world);
 
-    void DetectIslands(CWorld& world);
-    void PrintIslandsSummary();
-    void PrintUniqueIslandsSummary();
+    void ShowIslandsSummary();
 
     // Non-UI
     void ClearWorldAndUI(CWorld& world);
     void GetWorldsToLoad();
+    void DetectIslands(CWorld& world);
 };
 
 #endif // UI_MANAGER_HPP

@@ -102,7 +102,7 @@ void CUiManager::HandleUi(sf::RenderWindow& window, CWorld& world, float fps)
 
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "Islands");
 
-    DetectIslands(world);
+    ShowIslandsSummary();
 }
 
 void CUiManager::End()
@@ -163,6 +163,9 @@ void CUiManager::InitialiseWorld(CWorld& world)
     {
         ClearWorldAndUI(world);
         world.InitTiles(UiSettings::WORLD_COLS, UiSettings::WORLD_ROWS);
+
+        // Automatically detect islands (and unique ones) when initialising world
+        DetectIslands(world);
     }
     ImGui::PopStyleColor(2);
 }
@@ -175,6 +178,9 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
     {
         ClearWorldAndUI(world);
         world.InitTilesRandom();
+        
+        // Automatically detect islands (and unique ones) when initialising world
+        DetectIslands(world);
     }
     ImGui::PopStyleColor(2);
 }
@@ -297,26 +303,14 @@ void CUiManager::LoadWorld(CWorld& world)
     {
         ClearWorldAndUI(world);
         world.Load(m_worldsToLoad[UiSettings::WORLD_CURRENT_INDEX]);
+
+        // Automatically detect islands (and unique ones) when loading world
+        DetectIslands(world);
     }
     ImGui::PopStyleColor(2);
 }
 
-void CUiManager::DetectIslands(CWorld& world)
-{
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.9f, 0.2f, 1.0f));
-    if (ImGui::Button("Detect islands"))
-    {
-        UiSettings::ISLANDS = world.DetectIslands();
-        UiSettings::NUM_UNIQUE_ISLANDS = world.GetNumUniqueIslands();
-    }
-    ImGui::PopStyleColor(2);
-
-    PrintIslandsSummary();
-    PrintUniqueIslandsSummary();
-}
-
-void CUiManager::PrintIslandsSummary()
+void CUiManager::ShowIslandsSummary()
 {
     ImGui::Text("Number of islands: %zu", UiSettings::ISLANDS.size());
     for (int i = 0; i < UiSettings::ISLANDS.size(); i++)
@@ -334,10 +328,7 @@ void CUiManager::PrintIslandsSummary()
 
         ImGui::BulletText("%s", islandLog.c_str());
     }
-}
 
-void CUiManager::PrintUniqueIslandsSummary()
-{
     ImGui::Text("Number of unique islands: %d", UiSettings::NUM_UNIQUE_ISLANDS);
 }
 
@@ -366,4 +357,10 @@ void CUiManager::GetWorldsToLoad()
         m_worldsToLoad.begin(),
         m_worldsToLoad.end(),
         [](const std::string& a, const std::string& b) -> bool { return a < b; });
+}
+
+void CUiManager::DetectIslands(CWorld& world)
+{
+    UiSettings::ISLANDS = world.DetectIslands();
+    UiSettings::NUM_UNIQUE_ISLANDS = world.GetNumUniqueIslands();
 }
