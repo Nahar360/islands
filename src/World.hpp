@@ -55,7 +55,9 @@ private:
     void PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds);
     int GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset);
     bool IsCoordInBounds(sf::Vector2i coord);
+
     CTile GetIslandTileFromId(int id);
+    int GetTileIdFromTileCoords(const sf::Vector2i& coords);
 
     bool TileIdAlreadyInIslands(int id);
     bool TileIdAlreadyInAGivenIsland(int id, const std::vector<int>& island);
