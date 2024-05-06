@@ -323,11 +323,14 @@ void CUiManager::ShowIslandsSummary()
     ImGui::Text("Number of islands: %zu", UiSettings::ISLANDS.size());
     for (int i = 0; i < UiSettings::ISLANDS.size(); i++)
     {
-        std::string islandLog = "#" + std::to_string(i + 1) + " [\"" + UiSettings::ISLANDS[i].second + "\"]: { ";
-        for (int j = 0; j < UiSettings::ISLANDS[i].first.size(); j++)
+        const std::vector<int> islandIds = UiSettings::ISLANDS[i].GetIds();
+        const std::string islandHash = UiSettings::ISLANDS[i].GetHash();
+        
+        std::string islandLog = "#" + std::to_string(i + 1) + " [\"" + islandHash + "\"]: { ";
+        for (int j = 0; j < islandIds.size(); j++)
         {
-            islandLog += std::to_string(UiSettings::ISLANDS[i].first[j]);
-            if (j != UiSettings::ISLANDS[i].first.size() - 1)
+            islandLog += std::to_string(islandIds[j]);
+            if (j != islandIds.size() - 1)
             {
                 islandLog += ", ";
             }

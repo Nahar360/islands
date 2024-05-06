@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iostream>
 #include <set>
-#include <utility> // for std::pair, std::make_pair
 #include <vector>
 
 #include "GlobalSettings.hpp"
@@ -292,7 +291,7 @@ void CWorld::Load(const std::string& worldFileName)
     InitTilesFromRepr(repr);
 }
 
-std::vector<std::pair<std::vector<int>, std::string>> CWorld::DetectIslands()
+std::vector<CIsland> CWorld::DetectIslands()
 {
     m_islands.clear();
 
@@ -305,15 +304,17 @@ std::vector<std::pair<std::vector<int>, std::string>> CWorld::DetectIslands()
                 const int tileId = m_tiles[i][j].GetId();
                 if (!TileIdAlreadyInIslands(tileId))
                 {
-                    std::vector<int> island{tileId};
+                    std::vector<int> islandIds{tileId};
                     std::string hash("S"); // initialise it with "S" (Start) so hashes are not empty for 1-tile islands
-                    ExploreIslandFromLandTile(m_tiles[i][j], island, hash);
+                    ExploreIslandFromLandTile(m_tiles[i][j], islandIds, hash);
                     hash += "E"; // wrap it up with "E" (End) for completeness
 
                     // We could use hashes to compute the number of unique islands by inserting them in a set
                     // This would save the whole GetNumUniqueIslands() stuff, but keeping it as it is interesting
 
-                    m_islands.emplace_back(std::make_pair(island, hash));
+                    CIsland island = CIsland(islandIds, hash);
+
+                    m_islands.emplace_back(island);
                 }
             }
         }
@@ -451,9 +452,10 @@ bool CWorld::TileIdAlreadyInIslands(int id)
 {
     for (int i = 0; i < m_islands.size(); i++)
     {
-        for (int j = 0; j < m_islands[i].first.size(); j++)
+        const std::vector<int> islandIds = m_islands[i].GetIds();
+        for (int j = 0; j < islandIds.size(); j++)
         {
-            if (id == m_islands[i].first[j])
+            if (id == islandIds[j])
             {
                 return true;
             }
@@ -483,7 +485,7 @@ int CWorld::GetNumUniqueIslands()
     // First, temporarily create a vector of islands coordinates shifted to the origin
     for (int i = 0; i < m_islands.size(); i++)
     {
-        const std::vector<int> islandIds = m_islands[i].first;
+        const std::vector<int> islandIds = m_islands[i].GetIds();
 
         int minX = INT_MAX;
         int minY = INT_MAX;

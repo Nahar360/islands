@@ -1,6 +1,7 @@
 #include <string>
-#include <utility> // for std::pair
 #include <vector>
+
+#include "Island.hpp"
 
 namespace UiSettings
 {
@@ -9,7 +10,7 @@ int WORLD_ROWS = 2;
 
 char WORLD_FILE_NAME_TO_SAVE[255] = ".txt";
 
-std::vector<std::pair<std::vector<int>, std::string>> ISLANDS = {};
+std::vector<CIsland> ISLANDS = {};
 
 int NUM_UNIQUE_ISLANDS = 0;
 

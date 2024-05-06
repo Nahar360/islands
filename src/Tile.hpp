@@ -1,11 +1,8 @@
 #ifndef TILE_HPP
 #define TILE_HPP
 
-#include <iostream>
-
 #include <SFML/Graphics.hpp>
 
-#include "SFML/System/Vector2.hpp"
 #include "TileType.hpp"
 
 class CTile

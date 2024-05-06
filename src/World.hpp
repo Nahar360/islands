@@ -2,9 +2,9 @@
 #define WORLD_HPP
 
 #include <string>
-#include <utility> // for std::pair
 #include <vector>
 
+#include "Island.hpp"
 #include "Tile.hpp"
 
 class CWorld
@@ -31,7 +31,7 @@ public:
     bool Save(const std::string& worldFileName);
     void Load(const std::string& worldFileName);
 
-    std::vector<std::pair<std::vector<int>, std::string>> DetectIslands();
+    std::vector<CIsland> DetectIslands();
 
     int GetNumUniqueIslands();
 
@@ -44,8 +44,7 @@ private:
     std::vector<std::vector<CTile>> m_tiles;
 
     // Islands
-    std::vector<std::pair<std::vector<int>, std::string>> m_islands; // vector of vector of tile ids and unique hashes
-    std::vector<std::string> m_hashes;
+    std::vector<CIsland> m_islands; // vector of vector of tile ids and unique hashes
 
     void InitTilesFromRepr(const std::vector<std::vector<int>>& repr);
     CTile CreateTile(int id, int type, const sf::Vector2i& coords, const sf::Vector2f& pos);

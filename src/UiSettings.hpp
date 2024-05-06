@@ -2,8 +2,9 @@
 #define UI_SETTINGS_HPP
 
 #include <string>
-#include <utility> // for std::pair
 #include <vector>
+
+#include "Island.hpp"
 
 namespace UiSettings
 {
@@ -12,7 +13,7 @@ extern int WORLD_ROWS;
 
 extern char WORLD_FILE_NAME_TO_SAVE[255];
 
-extern std::vector<std::pair<std::vector<int>, std::string>> ISLANDS;
+extern std::vector<CIsland> ISLANDS;
 
 extern int NUM_UNIQUE_ISLANDS;
 

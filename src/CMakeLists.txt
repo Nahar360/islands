@@ -3,6 +3,8 @@ add_executable(islands
   GlobalSettings.hpp
   Game.cpp
   Game.hpp
+  Island.hpp
+  Island.cpp
   Tile.cpp
   Tile.hpp
   TileType.hpp
