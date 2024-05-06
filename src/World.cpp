@@ -549,3 +549,19 @@ int CWorld::GetNumUniqueIslands()
 
     return uniqueIslands.size();
 }
+
+bool CWorld::IsAllWater()
+{
+    for (int i = 0; i < m_tiles.size(); i++)
+    {
+        for (int j = 0; j < m_tiles[0].size(); j++)
+        {
+            if (m_tiles[i][j].IsTypeLand())
+            {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}

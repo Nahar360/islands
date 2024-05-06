@@ -36,6 +36,8 @@ public:
 
     int GetNumUniqueIslands();
 
+    bool IsAllWater();
+
 private:
     // Textures
     sf::Texture m_waterTexture;
