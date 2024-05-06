@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <set>
+#include <utility> // for std::pair, std::make_pair
 #include <vector>
 
 #include "GlobalSettings.hpp"
@@ -291,7 +292,7 @@ void CWorld::Load(const std::string& worldFileName)
     InitTilesFromRepr(repr);
 }
 
-std::vector<std::vector<int>> CWorld::DetectIslands()
+std::vector<std::pair<std::vector<int>, std::string>> CWorld::DetectIslands()
 {
     m_islands.clear();
 
@@ -305,8 +306,14 @@ std::vector<std::vector<int>> CWorld::DetectIslands()
                 if (!TileIdAlreadyInIslands(tileId))
                 {
                     std::vector<int> island{tileId};
-                    ExploreIslandFromLandTile(m_tiles[i][j], island);
-                    m_islands.emplace_back(island);
+                    std::string hash("S"); // initialise it with "S" (Start) so hashes are not empty for 1-tile islands
+                    ExploreIslandFromLandTile(m_tiles[i][j], island, hash);
+                    hash += "E"; // wrap it up with "E" (End) for completeness
+
+                    // We could use hashes to compute the number of unique islands by inserting them in a set
+                    // This would save the whole GetNumUniqueIslands() stuff, but keeping it as it is interesting
+
+                    m_islands.emplace_back(std::make_pair(island, hash));
                 }
             }
         }
@@ -315,7 +322,7 @@ std::vector<std::vector<int>> CWorld::DetectIslands()
     return m_islands;
 }
 
-void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island)
+void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island, std::string& hash)
 {
     std::cout << "Exploring island from land tile with ID: " << landTile.GetId() << std::endl;
 
@@ -331,8 +338,19 @@ void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& 
             {
                 if (!TileIdAlreadyInAGivenIsland(tile.GetId(), island))
                 {
+                    // Append id to island
                     island.emplace_back(tile.GetId());
-                    ExploreIslandFromLandTile(tile, island);
+
+                    // Append direction to hash
+                    // clang-format off
+                    if      (i == 0) hash += "U";
+                    else if (i == 1) hash += "L";
+                    else if (i == 2) hash += "D";
+                    else if (i == 3) hash += "R";
+                    // clang-format on
+
+                    // Keep exploring the island
+                    ExploreIslandFromLandTile(tile, island, hash);
                 }
             }
         }
@@ -433,9 +451,9 @@ bool CWorld::TileIdAlreadyInIslands(int id)
 {
     for (int i = 0; i < m_islands.size(); i++)
     {
-        for (int j = 0; j < m_islands[i].size(); j++)
+        for (int j = 0; j < m_islands[i].first.size(); j++)
         {
-            if (id == m_islands[i][j])
+            if (id == m_islands[i].first[j])
             {
                 return true;
             }
@@ -465,7 +483,7 @@ int CWorld::GetNumUniqueIslands()
     // First, temporarily create a vector of islands coordinates shifted to the origin
     for (int i = 0; i < m_islands.size(); i++)
     {
-        const std::vector<int> islandIds = m_islands[i];
+        const std::vector<int> islandIds = m_islands[i].first;
 
         int minX = INT_MAX;
         int minY = INT_MAX;

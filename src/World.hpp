@@ -1,6 +1,8 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
+#include <string>
+#include <utility> // for std::pair
 #include <vector>
 
 #include "Tile.hpp"
@@ -29,7 +31,7 @@ public:
     bool Save(const std::string& worldFileName);
     void Load(const std::string& worldFileName);
 
-    std::vector<std::vector<int>> DetectIslands();
+    std::vector<std::pair<std::vector<int>, std::string>> DetectIslands();
 
     int GetNumUniqueIslands();
 
@@ -42,7 +44,8 @@ private:
     std::vector<std::vector<CTile>> m_tiles;
 
     // Islands
-    std::vector<std::vector<int>> m_islands; // vector of vector of tile ids
+    std::vector<std::pair<std::vector<int>, std::string>> m_islands; // vector of vector of tile ids and unique hashes
+    std::vector<std::string> m_hashes;
 
     void InitTilesFromRepr(const std::vector<std::vector<int>>& repr);
     CTile CreateTile(int id, int type, const sf::Vector2i& coords, const sf::Vector2f& pos);
@@ -50,7 +53,7 @@ private:
     void RecalculateIds();
 
     // Detect Islands helper functions
-    void ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island);
+    void ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& island, std::string& hash);
     std::vector<int> GetNeighbourTileIds(const CTile& tile);
     void PrintNeighbourTileIds(const std::vector<int>& neighbourTileIds);
     int GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset);

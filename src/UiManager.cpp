@@ -210,11 +210,15 @@ void CUiManager::EditWorld(CWorld& world)
     if (ImGui::ArrowButton("##leftCol", ImGuiDir_Left))
     {
         world.RemoveColumn();
+        // Re-calculate islands because the world has changed
+        DetectIslands(world);
     }
     ImGui::SameLine();
     if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right))
     {
         world.AddColumn(UiSettings::WORLD_CURRENT_TYPE);
+        // Re-calculate islands because the world has changed
+        DetectIslands(world);
     }
 
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
@@ -222,15 +226,16 @@ void CUiManager::EditWorld(CWorld& world)
     if (ImGui::ArrowButton("##upRow", ImGuiDir_Up))
     {
         world.RemoveRow();
+        // Re-calculate islands because the world has changed
+        DetectIslands(world);
     }
     ImGui::SameLine();
     if (ImGui::ArrowButton("##downRow", ImGuiDir_Down))
     {
         world.AddRow(UiSettings::WORLD_CURRENT_TYPE);
+        // Re-calculate islands because the world has changed
+        DetectIslands(world);
     }
-
-    // Re-calculate islands because the world has changed
-    DetectIslands(world);
 }
 
 void CUiManager::ClearWorld(CWorld& world)
@@ -318,11 +323,11 @@ void CUiManager::ShowIslandsSummary()
     ImGui::Text("Number of islands: %zu", UiSettings::ISLANDS.size());
     for (int i = 0; i < UiSettings::ISLANDS.size(); i++)
     {
-        std::string islandLog = "#" + std::to_string(i + 1) + ": { ";
-        for (int j = 0; j < UiSettings::ISLANDS[i].size(); j++)
+        std::string islandLog = "#" + std::to_string(i + 1) + " [\"" + UiSettings::ISLANDS[i].second + "\"]: { ";
+        for (int j = 0; j < UiSettings::ISLANDS[i].first.size(); j++)
         {
-            islandLog += std::to_string(UiSettings::ISLANDS[i][j]);
-            if (j != UiSettings::ISLANDS[i].size() - 1)
+            islandLog += std::to_string(UiSettings::ISLANDS[i].first[j]);
+            if (j != UiSettings::ISLANDS[i].first.size() - 1)
             {
                 islandLog += ", ";
             }
