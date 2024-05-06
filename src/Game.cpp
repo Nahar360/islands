@@ -58,10 +58,7 @@ void CGame::CheckEvents()
             m_world.MouseDetection(event.mouseButton.button, sf::Mouse::getPosition(m_window));
             
             // Re-calculate islands because the world has changed
-            if (!m_world.IsAllWater())
-            {
-                m_uiManager.DetectIslands(m_world);
-            }
+            m_uiManager.DetectIslands(m_world);
         }
     }
 }

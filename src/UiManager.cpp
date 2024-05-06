@@ -165,10 +165,7 @@ void CUiManager::InitialiseWorld(CWorld& world)
         world.InitTiles(UiSettings::WORLD_COLS, UiSettings::WORLD_ROWS);
 
         // Automatically detect islands (and unique ones) when initialising world
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
     ImGui::PopStyleColor(2);
 }
@@ -183,10 +180,7 @@ void CUiManager::InitialiseRandomWorld(CWorld& world)
         world.InitTilesRandom();
         
         // Automatically detect islands (and unique ones) when initialising world
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
     ImGui::PopStyleColor(2);
 }
@@ -217,20 +211,14 @@ void CUiManager::EditWorld(CWorld& world)
     {
         world.RemoveColumn();
         // Re-calculate islands because the world has changed
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
     ImGui::SameLine();
     if (ImGui::ArrowButton("##rightCol", ImGuiDir_Right))
     {
         world.AddColumn(UiSettings::WORLD_CURRENT_TYPE);
         // Re-calculate islands because the world has changed
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
 
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Rows");
@@ -239,20 +227,14 @@ void CUiManager::EditWorld(CWorld& world)
     {
         world.RemoveRow();
         // Re-calculate islands because the world has changed
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
     ImGui::SameLine();
     if (ImGui::ArrowButton("##downRow", ImGuiDir_Down))
     {
         world.AddRow(UiSettings::WORLD_CURRENT_TYPE);
         // Re-calculate islands because the world has changed
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
 }
 
@@ -338,10 +320,7 @@ void CUiManager::LoadWorld(CWorld& world)
         world.Load(m_worldsToLoad[UiSettings::WORLD_CURRENT_INDEX]);
 
         // Automatically detect islands (and unique ones) when loading world
-        if (!world.IsAllWater())
-        {
-            DetectIslands(world);
-        }
+        DetectIslands(world);
     }
     ImGui::PopStyleColor(2);
 }

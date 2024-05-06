@@ -300,14 +300,15 @@ std::vector<CIsland> CWorld::DetectIslands()
     {
         for (int j = 0; j < m_tiles[0].size(); j++)
         {
-            if (m_tiles[i][j].IsTypeLand())
+            const CTile tile = m_tiles[i][j];
+            if (tile.IsTypeLand())
             {
-                const int tileId = m_tiles[i][j].GetId();
+                const int tileId = tile.GetId();
                 if (!TileIdAlreadyInIslands(tileId))
                 {
                     std::vector<int> islandIds{tileId};
                     std::string hash("S"); // initialise it with "S" (Start) so hashes are not empty for 1-tile islands
-                    ExploreIslandFromLandTile(m_tiles[i][j], islandIds, hash);
+                    ExploreIslandFromLandTile(tile, islandIds, hash);
                     hash += "E"; // wrap it up with "E" (End) for completeness
 
                     // We could use hashes to compute the number of unique islands by inserting them in a set
@@ -393,8 +394,7 @@ int CWorld::GetTileIdWithOffset(const CTile& tile, const sf::Vector2i& offset)
 
     if (IsCoordInBounds(otherTileCoord))
     {
-        const int otherTileId = m_tiles[otherTileCoord.x][otherTileCoord.y].GetId();
-        return otherTileId;
+        return m_tiles[otherTileCoord.x][otherTileCoord.y].GetId();
     }
 
     return -1;
