@@ -3,6 +3,7 @@
 #include <climits> // for INT_MAX
 #include <fstream>
 #include <iostream>
+#include <optional>
 #include <set>
 #include <vector>
 
@@ -334,24 +335,28 @@ void CWorld::ExploreIslandFromLandTile(const CTile& landTile, std::vector<int>& 
     {
         if (neighbourTileIds[i] != -1)
         {
-            const CTile tile = GetIslandTileFromId(neighbourTileIds[i]);
-            if (tile.IsTypeLand())
+            const std::optional<CTile> tileOptional = GetIslandTileFromId(neighbourTileIds[i]);
+            if (tileOptional)
             {
-                if (!TileIdAlreadyInAGivenIsland(tile.GetId(), island))
+                const CTile tile = tileOptional.value();
+                if (tile.IsTypeLand())
                 {
-                    // Append id to island
-                    island.emplace_back(tile.GetId());
+                    if (!TileIdAlreadyInAGivenIsland(tile.GetId(), island))
+                    {
+                        // Append id to island
+                        island.emplace_back(tile.GetId());
 
-                    // Append direction to hash
-                    // clang-format off
-                    if      (i == 0) hash += "U";
-                    else if (i == 1) hash += "L";
-                    else if (i == 2) hash += "D";
-                    else if (i == 3) hash += "R";
-                    // clang-format on
+                        // Append direction to hash
+                        // clang-format off
+                        if      (i == 0) hash += "U";
+                        else if (i == 1) hash += "L";
+                        else if (i == 2) hash += "D";
+                        else if (i == 3) hash += "R";
+                        // clang-format on
 
-                    // Keep exploring the island
-                    ExploreIslandFromLandTile(tile, island, hash);
+                        // Keep exploring the island
+                        ExploreIslandFromLandTile(tile, island, hash);
+                    }
                 }
             }
         }
@@ -411,7 +416,7 @@ bool CWorld::IsCoordInBounds(const sf::Vector2i coord)
     return isCoordInBounds;
 }
 
-CTile CWorld::GetIslandTileFromId(int id)
+std::optional<CTile> CWorld::GetIslandTileFromId(int id)
 {
     for (int i = 0; i < m_tiles.size(); i++)
     {
@@ -424,9 +429,7 @@ CTile CWorld::GetIslandTileFromId(int id)
         }
     }
 
-    // TODO
-    // add return statement
-    // currently: not all control paths return a value (warning)
+    return std::nullopt;
 }
 
 int CWorld::GetTileIdFromTileCoords(const sf::Vector2i& coords)
@@ -492,21 +495,25 @@ int CWorld::GetNumUniqueIslands()
         for (int j = 0; j < islandIds.size(); j++)
         {
             // Get the coords of each tile
-            const CTile islandTile = GetIslandTileFromId(islandIds[j]);
-            const sf::Vector2i islandTileCoords = islandTile.GetCoords();
-
-            // Get the min X and min Y coordinates
-            const int xCoord = islandTileCoords.x;
-            const int yCoord = islandTileCoords.y;
-
-            if (xCoord < minX)
+            const std::optional<CTile> islandOptional = GetIslandTileFromId(islandIds[j]);
+            if (islandOptional)
             {
-                minX = xCoord;
-            }
+                const CTile islandTile = islandOptional.value();
+                const sf::Vector2i islandTileCoords = islandTile.GetCoords();
 
-            if (yCoord < minY)
-            {
-                minY = yCoord;
+                // Get the min X and min Y coordinates
+                const int xCoord = islandTileCoords.x;
+                const int yCoord = islandTileCoords.y;
+
+                if (xCoord < minX)
+                {
+                    minX = xCoord;
+                }
+
+                if (yCoord < minY)
+                {
+                    minY = yCoord;
+                }
             }
         }
 
@@ -514,14 +521,18 @@ int CWorld::GetNumUniqueIslands()
         // Shift the whole island relative to the origin
         for (int j = 0; j < islandIds.size(); j++)
         {
-            const CTile islandTile = GetIslandTileFromId(islandIds[j]);
-            // Now, subtract those minimums from each coordinate
-            const sf::Vector2i shiftedCoords = islandTile.GetCoords() - sf::Vector2i{minX, minY};
-            const int islandTileId = GetTileIdFromTileCoords(shiftedCoords);
-            // If, for whatever reason, it was not possible to get the id from the coords, it does not get added to the shifted vector
-            if (islandTileId != -1)
+            const std::optional<CTile> islandOptional = GetIslandTileFromId(islandIds[j]);
+            if (islandOptional)
             {
-                islandShifted.push_back(islandTileId);
+                const CTile islandTile = islandOptional.value();
+                // Now, subtract those minimums from each coordinate
+                const sf::Vector2i shiftedCoords = islandTile.GetCoords() - sf::Vector2i{minX, minY};
+                const int islandTileId = GetTileIdFromTileCoords(shiftedCoords);
+                // If, for whatever reason, it was not possible to get the id from the coords, it does not get added to the shifted vector
+                if (islandTileId != -1)
+                {
+                    islandShifted.push_back(islandTileId);
+                }
             }
         }
 
