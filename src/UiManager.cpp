@@ -287,6 +287,13 @@ void CUiManager::LoadWorld(CWorld& world)
 {
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "Load");
 
+    // This prevents the program from crashing from a clean slate (i.e., no worlds have been saved yet)
+    if (m_worldsToLoad.empty())
+    {
+        ImGui::Text("Save at least 1 world so worlds can be loaded.");
+        return;
+    }
+
     if (ImGui::BeginCombo("World to load", m_worldsToLoad[UiSettings::WORLD_CURRENT_INDEX].data(), 0))
     {
         for (int n = 0; n < m_worldsToLoad.size(); n++)
