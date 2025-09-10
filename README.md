@@ -28,7 +28,7 @@ Detection of islands and unique number of islands in 2D-grid worlds.
 - Islands summary with vertical and horizontal scroll bars.
 - FPS is "too quick" -> run it at fixed 60 fps.
 - Long press on tile for neighbours semi-transparent overlay (green for land, red for water).
-- Max. recommended level of recursion?
+- Maximum recommended level of recursion?
 - Too small on some displays (i.e. laptop display).
 - Ability to create SFML window in a specific screen.
 - Add unit tests using /src/worlds.
